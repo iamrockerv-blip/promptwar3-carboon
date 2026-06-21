@@ -13,12 +13,7 @@ interface ProgressBarProps {
 export default function ProgressBar({ current, total }: ProgressBarProps) {
   return (
     <div className="flex flex-col gap-2 items-center w-full">
-      <progress 
-        className="sr-only" 
-        value={current + 1} 
-        max={total} 
-        aria-label="Quiz progress"
-      />
+      <progress className="sr-only" value={current + 1} max={total} aria-label="Quiz progress" />
       <span className="text-xs font-mono text-text-secondary tracking-widest uppercase">
         Question {current + 1} of {total}
       </span>
@@ -34,8 +29,8 @@ export default function ProgressBar({ current, total }: ProgressBarProps) {
                 isActive
                   ? 'w-6 bg-accent-sapphire'
                   : isCompleted
-                  ? 'w-2.5 bg-accent-sapphire/50'
-                  : 'w-2.5 bg-white/10'
+                    ? 'w-2.5 bg-accent-sapphire/50'
+                    : 'w-2.5 bg-white/10'
               }`}
             />
           );

@@ -10,12 +10,8 @@ const TimelineChart = dynamic(() => import('./TimelineChart'), { ssr: false });
 import { Calendar, AlertTriangle, Trees, Leaf } from 'lucide-react';
 
 export default function TimelineEngine() {
-  const { 
-    baselineProjections, 
-    simulatedProjections, 
-    simulatedScore, 
-    baselineScore 
-  } = useShiftSimulator();
+  const { baselineProjections, simulatedProjections, simulatedScore, baselineScore } =
+    useShiftSimulator();
   const twin = useCarbonStore((state) => state.twin);
 
   const [mounted, setMounted] = useState(false);
@@ -43,10 +39,7 @@ export default function TimelineEngine() {
   const node10Yr = currentProjection[3];
 
   return (
-    <div 
-      id="timeline-engine" 
-      className="w-full"
-    >
+    <div id="timeline-engine" className="w-full">
       <div className="p-6 md:p-8 rounded-3xl bg-neutral-900/40 border border-white/5 backdrop-blur-xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
@@ -58,7 +51,7 @@ export default function TimelineEngine() {
               Visualizing the cumulative footprint of your lifestyle over the next 10 years.
             </p>
           </div>
-          
+
           {isSimulatedActive && (
             <div className="px-4 py-2 rounded-2xl bg-green-500/10 border border-green-500/20 text-xs font-semibold text-green-400">
               ⚡ Live Sim Sync Active
@@ -67,7 +60,6 @@ export default function TimelineEngine() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
           <div className="lg:col-span-8 relative h-80 w-full" style={{ minWidth: 0 }}>
             {mounted ? (
               <TimelineChart data={chartData} isSimulatedActive={isSimulatedActive} />
@@ -89,7 +81,8 @@ export default function TimelineEngine() {
                 <span className="text-base font-normal text-neutral-400 ml-1">tonnes CO₂e</span>
               </p>
               <p className="text-xs text-neutral-400 mt-2">
-                This represents the weight of {Math.round(node10Yr.cumulativeTonnes / 6)} average passenger cars.
+                This represents the weight of {Math.round(node10Yr.cumulativeTonnes / 6)} average
+                passenger cars.
               </p>
             </div>
 
@@ -129,13 +122,17 @@ export default function TimelineEngine() {
                 </h4>
                 <div className="grid grid-cols-2 gap-2 mt-2">
                   <div className="p-2 rounded-xl bg-white/5 text-center">
-                    <p className="text-[9px] text-neutral-500 uppercase tracking-wider">5-Yr Savings</p>
+                    <p className="text-[9px] text-neutral-500 uppercase tracking-wider">
+                      5-Yr Savings
+                    </p>
                     <p className="text-sm font-extrabold text-white">
                       ${twin.greenFuture.moneySaved.toLocaleString()}
                     </p>
                   </div>
                   <div className="p-2 rounded-xl bg-white/5 text-center">
-                    <p className="text-[9px] text-neutral-500 uppercase tracking-wider">Health Rating</p>
+                    <p className="text-[9px] text-neutral-500 uppercase tracking-wider">
+                      Health Rating
+                    </p>
                     <p className="text-sm font-extrabold text-white">
                       {twin.greenFuture.improvedFuture.healthScore}/100
                     </p>
@@ -147,7 +144,6 @@ export default function TimelineEngine() {
               </div>
             )}
           </div>
-
         </div>
       </div>
     </div>

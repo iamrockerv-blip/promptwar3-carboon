@@ -15,10 +15,7 @@ export async function POST(request: Request) {
 
   try {
     const ip = getClientIp(request);
-    const { limited, remaining, reset } = isRateLimited(
-      `generate-twin:${ip}`,
-      RATE_LIMIT_CONFIG
-    );
+    const { limited, remaining, reset } = isRateLimited(`generate-twin:${ip}`, RATE_LIMIT_CONFIG);
 
     responseHeaders = {
       'X-RateLimit-Limit': String(RATE_LIMIT_CONFIG.limit),
@@ -33,17 +30,17 @@ export async function POST(request: Request) {
     if (limited) {
       return NextResponse.json(
         { error: 'Too many requests. Please wait before generating another twin.' },
-        { 
-          status: 429, 
+        {
+          status: 429,
           headers: {
             ...responseHeaders,
             'Retry-After': String(reset)
-          } 
+          }
         }
       );
     }
     const body = await readJsonBody(request);
-    
+
     // Validate request payload
     const parsedInput = GenerateTwinInputSchema.parse(body);
 

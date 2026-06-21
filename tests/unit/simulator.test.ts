@@ -10,10 +10,10 @@ describe('Carbon Shift Simulator Recalculations', () => {
 
   beforeEach(() => {
     baselineBreakdown = {
-      transport: 4.6,  // car_petrol
-      diet: 2.5,       // meat_regular
-      energy: 2.5,     // grid_gas
-      travel: 1.0,     // flights_1_2
+      transport: 4.6, // car_petrol
+      diet: 2.5, // meat_regular
+      energy: 2.5, // grid_gas
+      travel: 1.0, // flights_1_2
       consumption: 1.2 // average
     };
   });
@@ -136,27 +136,86 @@ describe('Carbon Shift Simulator Recalculations', () => {
       { questionId: 'q1', category: 'transport', value: 'bike_walk' }, // user already walks/bikes
       { questionId: 'q2', category: 'diet', value: 'meat_regular' },
       { questionId: 'q3', category: 'energy', value: 'solar_mix' }, // user already has solar
-      { questionId: 'q4', category: 'travel', value: 'never' },      // user never flies
+      { questionId: 'q4', category: 'travel', value: 'never' }, // user never flies
       { questionId: 'q5', category: 'consumption', value: 'minimalist' } // user is minimalist
     ];
 
     const shifts = getAvailableShifts(answers, baselineBreakdown);
 
     // Verify EV, Public transit and bike/walk shifts are NOT present because transport commute is already 'bike_walk'
-    const transportShifts = shifts.filter(s => s.category === 'transport');
+    const transportShifts = shifts.filter((s) => s.category === 'transport');
     expect(transportShifts).toHaveLength(0);
 
     // Renewable energy shift is NOT present because user already selected 'solar_mix'
-    const energyShifts = shifts.filter(s => s.category === 'energy');
+    const energyShifts = shifts.filter((s) => s.category === 'energy');
     expect(energyShifts).toHaveLength(0);
 
     // Flight elimination shift is NOT present because travel is 'never'
-    const travelShifts = shifts.filter(s => s.category === 'travel');
+    const travelShifts = shifts.filter((s) => s.category === 'travel');
     expect(travelShifts).toHaveLength(0);
 
     // Vegan diet shift SHOULD still be present because they are currently regular meat eater
-    const veganShift = shifts.find(s => s.id === 'go-vegan');
+    const veganShift = shifts.find((s) => s.id === 'go-vegan');
     expect(veganShift).toBeDefined();
+  });
+
+  it.each([
+    {
+      name: 'electric car and moderate diet',
+      values: ['car_electric', 'vegetarian', 'grid_gas', 'flights_3_5', 'frequent'],
+      expectedIds: [
+        'switch-to-transit',
+        'bike-walk-commute',
+        'go-vegan',
+        'renewable-energy',
+        'cut-flights-half',
+        'eliminate-flights',
+        'go-minimalist'
+      ]
+    },
+    {
+      name: 'already optimized lifestyle',
+      values: ['public_transit', 'vegan', 'solar_mix', 'never', 'minimalist'],
+      expectedIds: []
+    }
+  ])('builds the exact shift set for $name', ({ values, expectedIds }) => {
+    const categories: QuizAnswer['category'][] = [
+      'transport',
+      'diet',
+      'energy',
+      'travel',
+      'consumption'
+    ];
+    const answers = categories.map((category, index) => ({
+      questionId: `q${index + 1}`,
+      category,
+      value: values[index]
+    }));
+
+    expect(getAvailableShifts(answers, baselineBreakdown).map((shift) => shift.id)).toEqual(
+      expectedIds
+    );
+  });
+
+  it('never returns negative reductions when a category is already below a target factor', () => {
+    const answers: QuizAnswer[] = [
+      { questionId: 'q1', category: 'transport', value: 'car_electric' },
+      { questionId: 'q2', category: 'diet', value: 'vegetarian' },
+      { questionId: 'q3', category: 'energy', value: 'grid_gas' },
+      { questionId: 'q4', category: 'travel', value: 'flights_6_plus' },
+      { questionId: 'q5', category: 'consumption', value: 'luxury' }
+    ];
+    const tinyBreakdown: CarbonBreakdown = {
+      transport: 0,
+      diet: 0,
+      energy: 0,
+      travel: 0,
+      consumption: 0
+    };
+
+    expect(
+      getAvailableShifts(answers, tinyBreakdown).every((shift) => shift.co2Reduction >= 0)
+    ).toBe(true);
   });
 });
 
@@ -178,7 +237,7 @@ describe('Zustand Store Integration with Simulator Toggles', () => {
     // Get available shifts for the demo answers:
     const breakdown = freshStore.twin!.breakdown;
     const availableShifts = getAvailableShifts(freshStore.quizAnswers, breakdown);
-    
+
     // Toggle the first shift (e.g. switch-to-transit or switch-to-ev)
     const targetShift = availableShifts[0];
     useCarbonStore.getState().toggleShift(targetShift.id);

@@ -54,7 +54,7 @@ export default function QuestionCard({
   return (
     <div className="flex flex-col gap-6 w-full max-w-xl mx-auto">
       {/* Question Title */}
-      <h3 
+      <h3
         ref={titleRef}
         id={titleId}
         tabIndex={-1}
@@ -107,10 +107,10 @@ export default function QuestionCard({
               </span>
 
               {/* Option Icon */}
-              <div 
+              <div
                 className={`text-3xl w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border transition-all duration-300 ${
-                  isSelected 
-                    ? 'bg-gradient-to-tr from-accent-emerald/20 to-accent-sapphire/20 border-accent-emerald/30 scale-105' 
+                  isSelected
+                    ? 'bg-gradient-to-tr from-accent-emerald/20 to-accent-sapphire/20 border-accent-emerald/30 scale-105'
                     : 'bg-white/5 border-white/5 group-hover:bg-white/10 group-hover:border-white/10'
                 }`}
                 aria-hidden="true"

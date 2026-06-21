@@ -8,13 +8,13 @@ export type CarbonAura = 'green' | 'emerald' | 'sapphire' | 'amber' | 'crimson';
 
 export interface AuraDefinition {
   id: CarbonAura;
-  name: string;                     // "Green Aura", "Crimson Aura", etc.
-  tagline: string;                  // Short emotional descriptor
-  description: string;              // 1-2 sentence personality description
-  gradient: [string, string];       // Two HSL colors for gradient
-  glowColor: string;                // Glow effect color
-  thresholdMax: number;             // Upper bound of CO₂e range (tonnes/year)
-  emoji: string;                    // Visual shorthand
+  name: string; // "Green Aura", "Crimson Aura", etc.
+  tagline: string; // Short emotional descriptor
+  description: string; // 1-2 sentence personality description
+  gradient: [string, string]; // Two HSL colors for gradient
+  glowColor: string; // Glow effect color
+  thresholdMax: number; // Upper bound of CO₂e range (tonnes/year)
+  emoji: string; // Visual shorthand
 }
 
 // ──────────────────────────────────────────────
@@ -22,15 +22,15 @@ export interface AuraDefinition {
 // ──────────────────────────────────────────────
 
 export interface ReplayChapter {
-  title: string;                    // e.g., "Your Morning Commute"
-  body: string;                     // 1-2 sentence chapter text
-  icon: string;                     // Emoji or icon identifier
-  co2Contribution: number;          // tonnes/year from this activity
+  title: string; // e.g., "Your Morning Commute"
+  body: string; // 1-2 sentence chapter text
+  icon: string; // Emoji or icon identifier
+  co2Contribution: number; // tonnes/year from this activity
 }
 
 export interface CarbonLifeReplay {
-  narrative: string;                // AI-generated 3-5 sentence personal story
-  chapters: ReplayChapter[];        // 3 story beats for animated reveal
+  narrative: string; // AI-generated 3-5 sentence personal story
+  chapters: ReplayChapter[]; // 3 story beats for animated reveal
 }
 
 // ──────────────────────────────────────────────
@@ -38,23 +38,23 @@ export interface CarbonLifeReplay {
 // ──────────────────────────────────────────────
 
 export interface HabitShift {
-  id: string;                       // e.g., "switch-to-ev"
+  id: string; // e.g., "switch-to-ev"
   category: 'transport' | 'diet' | 'energy' | 'travel' | 'consumption';
-  label: string;                    // "Switch to electric vehicle"
-  description: string;              // "Replacing your petrol car with an EV"
-  co2Reduction: number;             // tonnes/year saved (calculated from user's baseline)
-  enabled: boolean;                 // Toggle state
-  icon: string;                     // Emoji
+  label: string; // "Switch to electric vehicle"
+  description: string; // "Replacing your petrol car with an EV"
+  co2Reduction: number; // tonnes/year saved (calculated from user's baseline)
+  enabled: boolean; // Toggle state
+  icon: string; // Emoji
   difficulty: 'easy' | 'moderate' | 'hard';
 }
 
 export interface SimulatorState {
-  activeShifts: string[];           // IDs of enabled habit shifts
-  simulatedScore: number;           // Recalculated score with shifts applied
-  simulatedAura: CarbonAura;        // Recalculated Aura with shifts applied
-  baselineScore: number;            // Original score (before any shifts)
-  baselineAura: CarbonAura;         // Original Aura
-  totalReduction: number;           // Sum of all enabled shift reductions
+  activeShifts: string[]; // IDs of enabled habit shifts
+  simulatedScore: number; // Recalculated score with shifts applied
+  simulatedAura: CarbonAura; // Recalculated Aura with shifts applied
+  baselineScore: number; // Original score (before any shifts)
+  baselineAura: CarbonAura; // Original Aura
+  totalReduction: number; // Sum of all enabled shift reductions
 }
 
 // ──────────────────────────────────────────────
@@ -72,7 +72,7 @@ export interface QuizAnswer {
 // ──────────────────────────────────────────────
 
 export interface CarbonBreakdown {
-  transport: number;                   // tonnes CO₂e
+  transport: number; // tonnes CO₂e
   diet: number;
   energy: number;
   travel: number;
@@ -80,7 +80,7 @@ export interface CarbonBreakdown {
 }
 
 export interface TimelineProjection {
-  year: number;                        // e.g., 1, 3, 5, 10
+  year: number; // e.g., 1, 3, 5, 10
   cumulativeTonnes: number;
   treesRequired: number;
   equivalentFlights: number;
@@ -88,7 +88,7 @@ export interface TimelineProjection {
 }
 
 export interface EarthConsequence {
-  populationMultiplier: number;        // default 10,000
+  populationMultiplier: number; // default 10,000
   totalAnnualTonnes: number;
   treesRequired: number;
   flightsEquivalent: number;
@@ -117,25 +117,25 @@ export interface Recommendation {
   category: string;
   action: string;
   impact: 'high' | 'medium' | 'low';
-  co2Saved: number;                    // tonnes/year
+  co2Saved: number; // tonnes/year
   difficulty: 'easy' | 'moderate' | 'hard';
   timeframe: 'immediate' | 'short-term' | 'long-term';
 }
 
 export interface CarbonTwin {
-  id: string;                          // nanoid or random ID for sharing
-  aura: CarbonAura;                    // DETERMINISTIC: assigned by carbon-engine.ts
-  score: number;                       // Annual CO₂e in tonnes
+  id: string; // nanoid or random ID for sharing
+  aura: CarbonAura; // DETERMINISTIC: assigned by carbon-engine.ts
+  score: number; // Annual CO₂e in tonnes
   impactLevel: 'low' | 'moderate' | 'high' | 'critical';
-  sustainabilityRating: number;        // 0-100
+  sustainabilityRating: number; // 0-100
   breakdown: CarbonBreakdown;
-  lifeReplay: CarbonLifeReplay;        // AI-generated story (from Gemini)
-  auraExplanation: string;             // AI-generated explanation of WHY this Aura
+  lifeReplay: CarbonLifeReplay; // AI-generated story (from Gemini)
+  auraExplanation: string; // AI-generated explanation of WHY this Aura
   projections: TimelineProjection[];
   consequences: EarthConsequence;
   greenFuture: GreenFutureComparison;
   recommendations: Recommendation[];
-  createdAt: string;                   // ISO timestamp
+  createdAt: string; // ISO timestamp
 }
 
 // ──────────────────────────────────────────────
@@ -191,18 +191,21 @@ export interface CarbonStore {
   answerQuestion: (answer: QuizAnswer) => void;
   goToQuestion: (index: number) => void;
   generateTwin: () => Promise<void>;
-  skipIntro: () => void;               // Jump from any intro phase → 'results'
+  skipIntro: () => void; // Jump from any intro phase → 'results'
   advanceToLifeReplay: () => void;
   advanceToResults: () => void;
   sendCoachMessage: (message: string) => Promise<void>;
   reset: () => void;
 
   // Simulator Actions
-  toggleShift: (shiftId: string) => void;   // Toggle a habit, instant recalc
-  resetSimulator: () => void;               // Clear all shifts
+  toggleShift: (shiftId: string) => void; // Toggle a habit, instant recalc
+  resetSimulator: () => void; // Clear all shifts
 
   // Quest Actions
   completeQuest: (questId: string) => void; // Log quest completion (confetti/particle trigger)
   resetQuests: () => void;
-  updateTwinAnswers: (category: 'transport' | 'diet' | 'energy' | 'travel' | 'consumption', value: string) => void;
+  updateTwinAnswers: (
+    category: 'transport' | 'diet' | 'energy' | 'travel' | 'consumption',
+    value: string
+  ) => void;
 }

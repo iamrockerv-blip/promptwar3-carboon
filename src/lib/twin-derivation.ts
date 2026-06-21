@@ -1,12 +1,12 @@
 import { QuizAnswer, CarbonBreakdown } from '@/types';
-import { 
-  calculateScore, 
-  assignAura, 
-  calculateBreakdown, 
-  calculateProjections, 
-  calculateConsequences, 
+import {
+  calculateScore,
+  assignAura,
+  calculateBreakdown,
+  calculateProjections,
+  calculateConsequences,
   calculateGreenFuture,
-  calculateWithShifts 
+  calculateWithShifts
 } from '@/lib/carbon-engine';
 import { getAvailableShifts } from '@/lib/simulator-options';
 
@@ -40,12 +40,12 @@ export function calculateSimulatorMetrics(
     enabled: activeShifts.includes(shift.id)
   }));
 
-  const { score: rawSimulatedScore } = calculateWithShifts(
-    breakdown,
-    enabledShiftsList
-  );
+  const { score: rawSimulatedScore } = calculateWithShifts(breakdown, enabledShiftsList);
 
-  const simulatedScore = Math.max(0.1, Math.round((rawSimulatedScore - carbonSavedTonnes) * 1000) / 1000);
+  const simulatedScore = Math.max(
+    0.1,
+    Math.round((rawSimulatedScore - carbonSavedTonnes) * 1000) / 1000
+  );
   const simulatedAura = assignAura(simulatedScore);
   const totalReduction = Math.round((baselineScore - simulatedScore) * 10) / 10;
 

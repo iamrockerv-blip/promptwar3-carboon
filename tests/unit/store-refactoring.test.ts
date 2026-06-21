@@ -23,12 +23,12 @@ describe('Zustand Store Actions Refactoring Baseline Verification', () => {
     vi.mocked(global.fetch).mockRejectedValueOnce(new Error('Network Error'));
 
     const store = useCarbonStore.getState();
-    
+
     // Set answers manually
     for (const ans of sampleAnswers) {
       store.answerQuestion(ans);
     }
-    
+
     expect(useCarbonStore.getState().quizAnswers).toHaveLength(5);
 
     // Call generateTwin
@@ -84,15 +84,18 @@ describe('Zustand Store Actions Refactoring Baseline Verification', () => {
     useCarbonStore.getState().completeQuest(firstQuest.id);
 
     const updatedStore = useCarbonStore.getState();
-    const expectedScore = Math.max(0.1, Math.round((11.8 - firstQuest.co2SavedKg / 1000) * 1000) / 1000);
+    const expectedScore = Math.max(
+      0.1,
+      Math.round((11.8 - firstQuest.co2SavedKg / 1000) * 1000) / 1000
+    );
     expect(updatedStore.twin!.score).toBe(expectedScore);
-    expect(updatedStore.quests.find(q => q.id === firstQuest.id)!.completed).toBe(true);
+    expect(updatedStore.quests.find((q) => q.id === firstQuest.id)!.completed).toBe(true);
 
     // Reset quests should restore everything to baseline
     useCarbonStore.getState().resetQuests();
     const resetStore = useCarbonStore.getState();
     expect(resetStore.twin!.score).toBe(11.8);
-    expect(resetStore.quests.find(q => q.id === firstQuest.id)!.completed).toBe(false);
+    expect(resetStore.quests.find((q) => q.id === firstQuest.id)!.completed).toBe(false);
   });
 
   it('should recalculate all twin and simulator parameters when updateTwinAnswers is called', async () => {

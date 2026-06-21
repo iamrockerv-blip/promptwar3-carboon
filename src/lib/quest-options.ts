@@ -7,9 +7,9 @@ import { QuizAnswer, PurificationQuest } from '@/types';
 export function getAvailableQuests(answers: QuizAnswer[]): PurificationQuest[] {
   const quests: PurificationQuest[] = [];
 
-  const transport = answers.find(a => a.category === 'transport')?.value as string;
-  const diet = answers.find(a => a.category === 'diet')?.value as string;
-  const energy = answers.find(a => a.category === 'energy')?.value as string;
+  const transport = answers.find((a) => a.category === 'transport')?.value as string;
+  const diet = answers.find((a) => a.category === 'diet')?.value as string;
+  const energy = answers.find((a) => a.category === 'energy')?.value as string;
 
   // 1. Transport Quest
   if (transport === 'car_petrol') {

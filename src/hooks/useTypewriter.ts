@@ -5,11 +5,7 @@ import { useState, useEffect, useRef } from 'react';
  * Custom hook to simulate a typewriter animation for strings.
  * Supports skip behavior by exposing a forceComplete function.
  */
-export function useTypewriter(
-  text: string,
-  speed = 25,
-  onComplete?: () => void
-) {
+export function useTypewriter(text: string, speed = 25, onComplete?: () => void) {
   const [prevText, setPrevText] = useState(text);
   const [displayedText, setDisplayedText] = useState('');
 

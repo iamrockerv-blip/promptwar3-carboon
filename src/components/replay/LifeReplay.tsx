@@ -25,15 +25,16 @@ export default function LifeReplay() {
   return (
     <div className="w-full min-h-screen bg-bg-primary px-4 md:px-8 pt-8 pb-32 flex flex-col items-center">
       {/* Background glow */}
-      <div 
-        style={{ background: `radial-gradient(circle at 10% 10%, ${definition.glowColor} 0%, transparent 60%)` }}
+      <div
+        style={{
+          background: `radial-gradient(circle at 10% 10%, ${definition.glowColor} 0%, transparent 60%)`
+        }}
         className="absolute inset-0 pointer-events-none opacity-20"
       />
 
       <div className="max-w-4xl w-full flex flex-col gap-6 md:gap-8 items-center z-10 my-auto">
-        
         {/* Shrunk Aura Indicator at Top */}
-        <m.div 
+        <m.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4 }}
@@ -41,7 +42,9 @@ export default function LifeReplay() {
         >
           <AuraOrb aura={twin.aura} size="sm" />
           <div>
-            <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-widest">Digital Twin</h3>
+            <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-widest">
+              Digital Twin
+            </h3>
             <h4 className="text-md font-bold" style={{ color: definition.gradient[0] }}>
               {definition.name}
             </h4>
@@ -51,11 +54,12 @@ export default function LifeReplay() {
         {/* Narrative Box */}
         <div className="min-h-[72px] md:min-h-[60px] text-center max-w-2xl px-4">
           {/* Static full text for screen readers, announced immediately */}
-          <p className="sr-only">
-            {twin.lifeReplay.narrative}
-          </p>
+          <p className="sr-only">{twin.lifeReplay.narrative}</p>
           {/* Animating text hidden from screen readers to prevent speech disruption */}
-          <p className="text-base md:text-lg font-body text-text-primary leading-relaxed antialiased" aria-hidden="true">
+          <p
+            className="text-base md:text-lg font-body text-text-primary leading-relaxed antialiased"
+            aria-hidden="true"
+          >
             {displayedText}
           </p>
         </div>
@@ -81,9 +85,7 @@ export default function LifeReplay() {
                   {chapter.icon}
                 </div>
 
-                <h4 className="text-base font-semibold text-text-primary">
-                  {chapter.title}
-                </h4>
+                <h4 className="text-base font-semibold text-text-primary">{chapter.title}</h4>
 
                 <p className="text-sm text-text-secondary leading-relaxed flex-grow">
                   {chapter.body}
@@ -115,7 +117,8 @@ export default function LifeReplay() {
             Total Footprint Profile
           </span>
           <div className="text-3xl font-display font-extrabold tracking-tight mt-1 text-text-primary">
-            {twin.score.toFixed(1)} Tonnes <span className="text-lg font-medium text-text-secondary">CO₂e / year</span>
+            {twin.score.toFixed(1)} Tonnes{' '}
+            <span className="text-lg font-medium text-text-secondary">CO₂e / year</span>
           </div>
         </m.div>
 
@@ -130,7 +133,6 @@ export default function LifeReplay() {
         >
           See Your Full Impact →
         </m.button>
-
       </div>
     </div>
   );

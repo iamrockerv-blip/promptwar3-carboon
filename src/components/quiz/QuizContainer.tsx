@@ -22,9 +22,7 @@ export default function QuizContainer() {
   const activeQuestion = QUIZ_QUESTIONS[currentQuestion];
 
   // Retrieve current selection if user returned to a previously answered question
-  const currentAnswer = quizAnswers.find(
-    (a) => a.questionId === activeQuestion?.id
-  );
+  const currentAnswer = quizAnswers.find((a) => a.questionId === activeQuestion?.id);
 
   const handleSelectOption = (option: QuizOption) => {
     // 1. Record answer in Zustand
@@ -58,7 +56,6 @@ export default function QuizContainer() {
 
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col gap-8 px-4 py-8 items-center min-h-[600px] justify-center relative">
-      
       {/* Back arrow navigator */}
       <button
         type="button"
@@ -91,7 +88,6 @@ export default function QuizContainer() {
           </m.div>
         </AnimatePresence>
       </div>
-
     </div>
   );
 }

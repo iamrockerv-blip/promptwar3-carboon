@@ -1,9 +1,9 @@
 // tests/unit/carbon-engine.test.ts
 import { describe, it, expect } from 'vitest';
-import { 
-  calculateBreakdown, 
-  calculateScore, 
-  calculateProjections, 
+import {
+  calculateBreakdown,
+  calculateScore,
+  calculateProjections,
   calculateConsequences,
   calculateGreenFuture
 } from '@/lib/carbon-engine';
@@ -45,7 +45,7 @@ describe('Carbon Engine Calculations', () => {
     const breakdown = calculateBreakdown(sampleAnswers);
     const sum = Object.values(breakdown).reduce((a, b) => a + b, 0);
     const expectedScore = Math.round(sum * 10) / 10;
-    
+
     const score = calculateScore(sampleAnswers);
     expect(score).toBe(expectedScore);
   });
@@ -55,7 +55,7 @@ describe('Carbon Engine Calculations', () => {
     const projections = calculateProjections(score);
 
     expect(projections).toHaveLength(4);
-    
+
     // Year 1
     expect(projections[0].year).toBe(1);
     expect(projections[0].cumulativeTonnes).toBe(12.0);
@@ -88,6 +88,21 @@ describe('Carbon Engine Calculations', () => {
     expect(comparison.improvedFuture.co2_5yr).toBeLessThan(comparison.currentFuture.co2_5yr);
     expect(comparison.reductionPercentage).toBeGreaterThan(0);
     expect(comparison.moneySaved).toBeGreaterThan(0);
+  });
+
+  it('uses a bounded default financial estimate for unknown answer values', () => {
+    const unknownAnswers = [
+      { questionId: 'q1', category: 'transport', value: 'unknown_transport' },
+      { questionId: 'q2', category: 'diet', value: 'unknown_diet' },
+      { questionId: 'q3', category: 'energy', value: 'unknown_energy' },
+      { questionId: 'q4', category: 'travel', value: 'unknown_travel' },
+      { questionId: 'q5', category: 'consumption', value: 'unknown_consumption' }
+    ] as QuizAnswer[];
+    const breakdown = calculateBreakdown(unknownAnswers);
+
+    const result = calculateGreenFuture(5, breakdown, unknownAnswers);
+    expect(result.currentFuture.cost_5yr).toBeGreaterThan(0);
+    expect(Number.isFinite(result.moneySaved)).toBe(true);
   });
 
   it('should return valid values for all 1920 possible quiz combinations', () => {

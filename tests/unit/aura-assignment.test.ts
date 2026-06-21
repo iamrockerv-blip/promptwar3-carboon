@@ -36,7 +36,7 @@ describe('Deterministic Carbon Aura Assignment', () => {
   it('should be idempotent and return the same aura for identical scores across multiple runs', () => {
     const score = 7.5;
     const initialAura = assignAura(score);
-    
+
     for (let i = 0; i < 100; i++) {
       expect(assignAura(score)).toBe(initialAura);
     }

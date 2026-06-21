@@ -9,7 +9,15 @@ import AuraReveal from '@/components/aura/AuraReveal';
 import LifeReplay from '@/components/replay/LifeReplay';
 import SkipIntroButton from '@/components/intro/SkipIntroButton';
 import { AnimatePresence, LazyMotion, domMax, MotionConfig, m } from 'framer-motion';
-import { LayoutDashboard, Sliders, MessageSquare, Globe, Share2, RefreshCw, Settings } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Sliders,
+  MessageSquare,
+  Globe,
+  Share2,
+  RefreshCw,
+  Settings
+} from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 // Phase 2 Dashboard Sections
@@ -17,8 +25,12 @@ import HeroSummaryZone from '@/components/dashboard/HeroSummaryZone';
 import TwinProfile from '@/components/twin/TwinProfile';
 import TimelineEngine from '@/components/timeline/TimelineEngine';
 
-const ProfileSettings = dynamic(() => import('@/components/profile/ProfileSettings'), { ssr: false });
-const EarthConsequence = dynamic(() => import('@/components/consequence/EarthConsequence'), { ssr: false });
+const ProfileSettings = dynamic(() => import('@/components/profile/ProfileSettings'), {
+  ssr: false
+});
+const EarthConsequence = dynamic(() => import('@/components/consequence/EarthConsequence'), {
+  ssr: false
+});
 const ActionCenter = dynamic(() => import('@/components/simulator/ActionCenter'), { ssr: false });
 const AICoach = dynamic(() => import('@/components/coach/AICoach'), { ssr: false });
 const ShareCard = dynamic(() => import('@/components/share/ShareCard'), { ssr: false });
@@ -64,7 +76,11 @@ export default function HomeClient() {
   return (
     <LazyMotion features={domMax}>
       <MotionConfig reducedMotion="user">
-        <main id="main-content" tabIndex={-1} className="min-h-screen relative bg-bg-primary overflow-x-hidden flex flex-col justify-between">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="min-h-screen relative bg-bg-primary overflow-x-hidden flex flex-col justify-between"
+        >
           {/* Global Skip Intro overlay button */}
           <SkipIntroButton />
 
@@ -153,7 +169,10 @@ function DashboardView() {
           {/* Logo / Title */}
           <div className="flex items-center gap-3">
             <span className="text-xl font-bold bg-gradient-to-r from-green-400 to-indigo-400 bg-clip-text text-transparent flex items-baseline">
-              Carbon Twin AI<sup className="text-[10px] font-bold ml-0.5 select-none text-indigo-400 align-super">TM</sup>
+              Carbon Twin AI
+              <sup className="text-[10px] font-bold ml-0.5 select-none text-indigo-400 align-super">
+                TM
+              </sup>
             </span>
           </div>
 
@@ -185,7 +204,10 @@ function DashboardView() {
                   {isActive && (
                     <span className="absolute left-0 top-1/4 bottom-1/4 w-1 rounded-r bg-emerald-400" />
                   )}
-                  <Icon aria-hidden="true" className={`w-4 h-4 transition-colors ${isActive ? 'text-emerald-400' : 'text-neutral-500 group-hover:text-neutral-300'}`} />
+                  <Icon
+                    aria-hidden="true"
+                    className={`w-4 h-4 transition-colors ${isActive ? 'text-emerald-400' : 'text-neutral-500 group-hover:text-neutral-300'}`}
+                  />
                   {tab.label}
                 </button>
               );
@@ -218,7 +240,10 @@ function DashboardView() {
         {/* Mobile top bar */}
         <header className="md:hidden w-full bg-neutral-950 border-b border-white/5 py-4 px-6 flex items-center justify-between z-30">
           <span className="text-lg font-bold bg-gradient-to-r from-green-400 to-indigo-400 bg-clip-text text-transparent flex items-baseline">
-            Carbon Twin AI<sup className="text-[9px] font-bold ml-0.5 select-none text-indigo-400 align-super">TM</sup>
+            Carbon Twin AI
+            <sup className="text-[9px] font-bold ml-0.5 select-none text-indigo-400 align-super">
+              TM
+            </sup>
           </span>
           <div className="flex gap-2">
             <Link

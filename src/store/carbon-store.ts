@@ -3,7 +3,12 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { CarbonStore, QuizAnswer, ChatMessage, CarbonTwin, PurificationQuest } from '@/types';
 import { DEMO_TWIN } from '@/lib/demo-data';
-import { calculateScore, assignAura, calculateProjections, calculateConsequences } from '@/lib/carbon-engine';
+import {
+  calculateScore,
+  assignAura,
+  calculateProjections,
+  calculateConsequences
+} from '@/lib/carbon-engine';
 import { getAvailableQuests } from '@/lib/quest-options';
 import { COACH_MESSAGES } from '@/lib/constants';
 import { generateTwinApi } from '@/services/twin-service';
@@ -120,7 +125,14 @@ export const useCarbonStore = create<CarbonStore>()(
             id: `twin-${crypto.randomUUID()}`,
             score,
             aura,
-            impactLevel: score <= 2.3 ? 'low' : score <= 4.7 ? 'moderate' : score <= 14.0 ? 'high' : 'critical',
+            impactLevel:
+              score <= 2.3
+                ? 'low'
+                : score <= 4.7
+                  ? 'moderate'
+                  : score <= 14.0
+                    ? 'high'
+                    : 'critical',
             sustainabilityRating: Math.max(0, Math.min(100, Math.round((20 - score) * 5))), // Rating out of 100
             breakdown,
             projections,
@@ -150,10 +162,10 @@ export const useCarbonStore = create<CarbonStore>()(
           });
         } catch (err) {
           logger.error('Failed to generate Carbon Twin via AI, using fallback:', err);
-          
+
           // Fallback implementation
           const baseline = calculateTwinBaseline(quizAnswers);
-          
+
           const fallbackTwin = createFallbackTwin(
             baseline.score,
             baseline.aura,
@@ -210,7 +222,7 @@ export const useCarbonStore = create<CarbonStore>()(
 
         try {
           const { twin, coachMessages } = get();
-          
+
           const data = await sendCoachMessageApi(
             text,
             coachMessages,
@@ -299,7 +311,10 @@ export const useCarbonStore = create<CarbonStore>()(
 
           // Adjust the twin's score by subtracting the carbon saved
           const originalScore = state.isDemoMode ? 7.2 : calculateScore(state.quizAnswers);
-          const newScore = Math.max(0.1, Math.round((originalScore - carbonSavedTonnes) * 1000) / 1000);
+          const newScore = Math.max(
+            0.1,
+            Math.round((originalScore - carbonSavedTonnes) * 1000) / 1000
+          );
           const newAura = assignAura(newScore);
 
           // Re-calculate other components that depend on the twin score
@@ -339,7 +354,7 @@ export const useCarbonStore = create<CarbonStore>()(
         set((state) => {
           if (!state.twin) return {};
           const updatedQuests = state.quests.map((q) => ({ ...q, completed: false }));
-          
+
           const originalScore = state.isDemoMode ? 7.2 : calculateScore(state.quizAnswers);
           const newAura = assignAura(originalScore);
           const newProjections = calculateProjections(originalScore);
@@ -388,7 +403,7 @@ export const useCarbonStore = create<CarbonStore>()(
 
           // 3. Recalculate quests (re-evaluate available quests based on updated answers)
           const quests = getAvailableQuests(updatedAnswers);
-          
+
           // 4. Reset total carbon saved since quests are reset
           const totalCarbonSavedKg = 0;
 
@@ -409,7 +424,13 @@ export const useCarbonStore = create<CarbonStore>()(
             projections,
             consequences,
             greenFuture,
-            impactLevel: (score <= 2.3 ? 'low' : score <= 4.7 ? 'moderate' : score <= 14.0 ? 'high' : 'critical') as 'low' | 'moderate' | 'high' | 'critical',
+            impactLevel: (score <= 2.3
+              ? 'low'
+              : score <= 4.7
+                ? 'moderate'
+                : score <= 14.0
+                  ? 'high'
+                  : 'critical') as 'low' | 'moderate' | 'high' | 'critical',
             sustainabilityRating: Math.max(0, Math.min(100, Math.round((20 - score) * 5))),
             auraExplanation: `Adjusted profile: assigned the ${aura.toUpperCase()} Aura with an annual footprint of ${score} tonnes of CO2e.`,
             lifeReplay: {

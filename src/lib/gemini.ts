@@ -88,7 +88,7 @@ User context:
   });
 
   // Convert conversation history to Gemini content parts
-  const contents = params.history.map(msg => ({
+  const contents = params.history.map((msg) => ({
     role: msg.sender === 'user' ? 'user' : 'model',
     parts: [{ text: msg.text }]
   }));
@@ -102,7 +102,10 @@ User context:
   try {
     const result = await model.generateContent({ contents });
     const textResponse = result.response.text();
-    return textResponse || "I'm here to help you reduce your carbon footprint. What area of your lifestyle would you like to discuss?";
+    return (
+      textResponse ||
+      "I'm here to help you reduce your carbon footprint. What area of your lifestyle would you like to discuss?"
+    );
   } catch (error) {
     logger.error('Error in generateCoachResponse:', error);
     throw error;

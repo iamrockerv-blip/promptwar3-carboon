@@ -287,21 +287,25 @@ describe('API Route Integration Tests', () => {
     };
 
     for (let index = 0; index < 10; index += 1) {
-      await generateTwinPost(new Request('http://localhost/api/generate-twin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-forwarded-for': clientIp },
-        body: JSON.stringify(twinBody)
-      }));
+      await generateTwinPost(
+        new Request('http://localhost/api/generate-twin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-forwarded-for': clientIp },
+          body: JSON.stringify(twinBody)
+        })
+      );
     }
 
-    const coachResponse = await carbonCoachPost(new Request('http://localhost/api/carbon-coach', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-forwarded-for': clientIp },
-      body: JSON.stringify({
-        message: 'Help me improve.',
-        history: []
+    const coachResponse = await carbonCoachPost(
+      new Request('http://localhost/api/carbon-coach', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-forwarded-for': clientIp },
+        body: JSON.stringify({
+          message: 'Help me improve.',
+          history: []
+        })
       })
-    }));
+    );
 
     expect(coachResponse.status).toBe(200);
   });

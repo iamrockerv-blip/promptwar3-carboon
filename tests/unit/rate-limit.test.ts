@@ -1,9 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  clearRateLimitStore,
-  getClientIp,
-  isRateLimited
-} from '@/lib/rate-limit';
+import { clearRateLimitStore, getClientIp, isRateLimited } from '@/lib/rate-limit';
 
 describe('rate limiting', () => {
   beforeEach(() => {
@@ -44,5 +40,23 @@ describe('rate limiting', () => {
       headers: { 'x-forwarded-for': '<script>' }
     });
     expect(getClientIp(invalid)).toBe('unknown-client');
+  });
+
+  it('cleans expired keys and evicts the oldest key when capacity is reached', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-01-01T00:00:00Z'));
+
+    for (let index = 0; index < 10_000; index += 1) {
+      isRateLimited(`client-${index}`, { limit: 1, windowMs: 1_000 });
+    }
+
+    vi.advanceTimersByTime(1_000);
+    expect(isRateLimited('fresh-client', { limit: 1, windowMs: 1_000 }).limited).toBe(false);
+
+    clearRateLimitStore();
+    for (let index = 0; index < 10_000; index += 1) {
+      isRateLimited(`active-${index}`, { limit: 1, windowMs: 60_000 });
+    }
+    expect(isRateLimited('capacity-client', { limit: 1, windowMs: 60_000 }).limited).toBe(false);
   });
 });

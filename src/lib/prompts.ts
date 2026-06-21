@@ -1,5 +1,3 @@
-
-
 export const TWIN_GENERATION_SYSTEM_INSTRUCTION = `
 You are Carbon Twin AI, an environmental storyteller and sustainability advisor.
 

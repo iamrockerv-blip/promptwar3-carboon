@@ -29,12 +29,12 @@ export default function ShareCard() {
     const y = e.clientY - rect.top;
     const midX = rect.width / 2;
     const midY = rect.height / 2;
-    
+
     // Rotate relative to center (max 15 degrees)
     const rX = -((y - midY) / midY) * 15;
     const rY = ((x - midX) / midX) * 15;
-    
-    setTilt(prev => ({
+
+    setTilt((prev) => ({
       ...prev,
       rotateX: rX,
       rotateY: rY,
@@ -44,7 +44,7 @@ export default function ShareCard() {
   };
 
   const handleMouseEnter = () => {
-    setTilt(prev => ({ ...prev, showGlare: true }));
+    setTilt((prev) => ({ ...prev, showGlare: true }));
   };
 
   const handleMouseLeave = () => {
@@ -158,10 +158,7 @@ export default function ShareCard() {
   };
 
   return (
-    <div 
-      id="share-card"
-      className="w-full"
-    >
+    <div id="share-card" className="w-full">
       <div className="p-6 md:p-8 rounded-3xl bg-neutral-900/40 border border-white/5 backdrop-blur-xl">
         <div className="max-w-xl mx-auto text-center space-y-6">
           <h3 className="text-xl font-bold text-white flex items-center justify-center gap-2">
@@ -169,21 +166,22 @@ export default function ShareCard() {
             Share Your Carbon Twin
           </h3>
           <p className="text-sm text-neutral-400">
-            Export a high-fidelity digital ID card matching your Aura theme. Show your community your impact and pledge to shift.
+            Export a high-fidelity digital ID card matching your Aura theme. Show your community
+            your impact and pledge to shift.
           </p>
 
           {/* HTML Preview card with 3D Rotate Interaction */}
           <div className="perspective-1000 w-full max-w-md mx-auto py-4">
-            <div 
+            <div
               onMouseMove={handleMouseMove}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
-              style={{ 
+              style={{
                 transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
                 transformStyle: 'preserve-3d',
                 background: `radial-gradient(circle at 80% 20%, ${getAuraColorWithAlpha(auraDef.glowColor, 0.15)}, transparent), linear-gradient(135deg, #0b0f19, #171c2a)`,
                 borderColor: getAuraColorWithAlpha(auraDef.glowColor, 0.35),
-                boxShadow: tilt.showGlare 
+                boxShadow: tilt.showGlare
                   ? `0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 30px -5px ${getAuraColorWithAlpha(auraDef.glowColor, 0.35)}`
                   : `0 12px 40px -10px rgba(0, 0, 0, 0.7)`
               }}
@@ -191,7 +189,7 @@ export default function ShareCard() {
             >
               {/* Holographic Glare Overlay */}
               {tilt.showGlare && (
-                <div 
+                <div
                   className="absolute inset-0 pointer-events-none mix-blend-color-dodge opacity-25 z-10"
                   style={{
                     background: `radial-gradient(circle at ${tilt.glareX}% ${tilt.glareY}%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 50%)`
@@ -200,18 +198,23 @@ export default function ShareCard() {
               )}
 
               {/* Sub-layers with 3D translation */}
-              <div className="flex justify-between items-start" style={{ transform: 'translateZ(20px)' }}>
+              <div
+                className="flex justify-between items-start"
+                style={{ transform: 'translateZ(20px)' }}
+              >
                 <span className="text-[10px] text-neutral-500 font-mono tracking-widest uppercase">
                   Carbon Twin AI // Digital ID
                 </span>
-                <span className="text-lg" style={{ transform: 'translateZ(10px)' }}>{auraDef.emoji}</span>
+                <span className="text-lg" style={{ transform: 'translateZ(10px)' }}>
+                  {auraDef.emoji}
+                </span>
               </div>
 
               <div className="space-y-2" style={{ transform: 'translateZ(30px)' }}>
-                <span 
+                <span
                   className="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border inline-block"
-                  style={{ 
-                    color: auraDef.glowColor, 
+                  style={{
+                    color: auraDef.glowColor,
                     borderColor: getAuraColorWithAlpha(auraDef.glowColor, 0.4),
                     backgroundColor: getAuraColorWithAlpha(auraDef.glowColor, 0.1)
                   }}
@@ -223,7 +226,7 @@ export default function ShareCard() {
                 </h4>
               </div>
 
-              <div 
+              <div
                 className="pt-4 border-t border-white/10 flex items-baseline justify-between"
                 style={{ transform: 'translateZ(25px)' }}
               >
@@ -235,16 +238,18 @@ export default function ShareCard() {
                     <span className="text-3xl font-black text-white font-mono">
                       {currentScore.toFixed(1)}
                     </span>
-                    <span className="text-xs text-neutral-400 font-semibold font-sans">tonnes/yr</span>
+                    <span className="text-xs text-neutral-400 font-semibold font-sans">
+                      tonnes/yr
+                    </span>
                   </div>
                 </div>
-                
+
                 <div className="text-right">
                   <p className="text-[10px] text-neutral-500 uppercase tracking-wider font-semibold">
                     Twin Rating
                   </p>
                   <p className="text-lg font-black text-emerald-400 mt-0.5 font-mono">
-                    {Math.round(Math.max(5, 100 - (currentScore * 5)))}/100
+                    {Math.round(Math.max(5, 100 - currentScore * 5))}/100
                   </p>
                 </div>
               </div>
@@ -255,6 +260,7 @@ export default function ShareCard() {
             type="button"
             onClick={handleDownload}
             disabled={isExporting}
+            aria-busy={isExporting}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-black hover:bg-neutral-200 transition-colors text-sm font-bold shadow-lg shadow-white/5 cursor-pointer disabled:opacity-50"
           >
             <Download className="w-4 h-4" />

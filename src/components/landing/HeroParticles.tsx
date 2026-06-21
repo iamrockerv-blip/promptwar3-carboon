@@ -23,7 +23,7 @@ export default function HeroParticles() {
     if (!ctx) return;
 
     let animationFrameId: number;
-    
+
     // Set size to fill container
     const resizeCanvas = () => {
       canvas.width = canvas.parentElement?.clientWidth || window.innerWidth;
@@ -42,7 +42,7 @@ export default function HeroParticles() {
         vx: (Math.random() - 0.5) * 0.4,
         vy: -Math.random() * 0.4 - 0.1, // Always drift slightly upwards
         size: Math.random() * 2 + 1,
-        alpha: Math.random() * 0.4 + 0.1,
+        alpha: Math.random() * 0.4 + 0.1
       });
     }
 
@@ -117,8 +117,8 @@ export default function HeroParticles() {
   }, []);
 
   return (
-    <canvas 
-      ref={canvasRef} 
+    <canvas
+      ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none -z-10 block opacity-50"
     />
   );

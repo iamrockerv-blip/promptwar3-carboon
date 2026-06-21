@@ -4,16 +4,7 @@
 import { useState } from 'react';
 import { useShiftSimulator } from '@/hooks/useShiftSimulator';
 import { m, AnimatePresence } from 'framer-motion';
-import { 
-  Globe, 
-  Flame, 
-  Car, 
-  Plane, 
-  Trees, 
-  Home,
-  ChevronDown,
-  ChevronUp
-} from 'lucide-react';
+import { Globe, Flame, Car, Plane, Trees, Home, ChevronDown, ChevronUp } from 'lucide-react';
 
 export default function EarthConsequence() {
   const { simulatedConsequences } = useShiftSimulator();
@@ -74,10 +65,7 @@ export default function EarthConsequence() {
   ];
 
   return (
-    <div 
-      id="earth-consequence"
-      className="w-full"
-    >
+    <div id="earth-consequence" className="w-full">
       <div className="p-6 md:p-8 rounded-3xl bg-neutral-900/40 border border-white/5 backdrop-blur-xl">
         <div className="text-center max-w-2xl mx-auto mb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-xs font-semibold text-red-400 mb-4">
@@ -88,16 +76,18 @@ export default function EarthConsequence() {
             If 10,000 People Lived Like You
           </h3>
           <p className="text-sm text-neutral-400 mt-2">
-            Your single footprint multiplied by a small town. When actions scale, the footprint becomes a force of nature.
+            Your single footprint multiplied by a small town. When actions scale, the footprint
+            becomes a force of nature.
           </p>
 
           {!isOpen && (
-            <m.div 
+            <m.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-xs font-semibold text-orange-400 mt-4 bg-orange-500/10 border border-orange-500/20 rounded-xl p-3 inline-block"
             >
-              🔥 Annually: Melts <strong>{c.iceMelt_sqm.toLocaleString()} m²</strong> of Arctic ice and requires <strong>{c.treesRequired.toLocaleString()}</strong> offset trees.
+              🔥 Annually: Melts <strong>{c.iceMelt_sqm.toLocaleString()} m²</strong> of Arctic ice
+              and requires <strong>{c.treesRequired.toLocaleString()}</strong> offset trees.
             </m.div>
           )}
         </div>
@@ -112,7 +102,11 @@ export default function EarthConsequence() {
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-neutral-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
           >
             {isOpen ? 'Hide Visual Details' : 'Show 10,000x Earth Impact Details'}
-            {isOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            {isOpen ? (
+              <ChevronUp className="w-3.5 h-3.5" />
+            ) : (
+              <ChevronDown className="w-3.5 h-3.5" />
+            )}
           </button>
         </div>
 
@@ -138,7 +132,10 @@ export default function EarthConsequence() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.3 }}
-                      style={{ backgroundColor: 'rgba(23, 23, 23, 0.4)', boxShadow: `0 4px 20px ${card.bgGlow}` }}
+                      style={{
+                        backgroundColor: 'rgba(23, 23, 23, 0.4)',
+                        boxShadow: `0 4px 20px ${card.bgGlow}`
+                      }}
                       className="p-5 rounded-2xl border border-white/5 flex flex-col justify-between hover:border-white/10 transition-colors"
                     >
                       <div>
@@ -148,7 +145,7 @@ export default function EarthConsequence() {
                           </h4>
                           <Icon className={`w-5 h-5 ${card.color}`} />
                         </div>
-                        
+
                         <p className="text-2xl font-black text-white tracking-tight">
                           {card.value}
                         </p>
@@ -163,7 +160,11 @@ export default function EarthConsequence() {
               </div>
 
               <div className="mt-4 text-center border-t border-white/5 pt-4 text-xs text-neutral-500">
-                Total annual footprint for this population: <span className="font-bold text-white">{(c.totalAnnualTonnes / 1000).toFixed(1)}k tonnes CO₂e</span>.
+                Total annual footprint for this population:{' '}
+                <span className="font-bold text-white">
+                  {(c.totalAnnualTonnes / 1000).toFixed(1)}k tonnes CO₂e
+                </span>
+                .
               </div>
             </m.div>
           )}

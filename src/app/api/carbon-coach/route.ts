@@ -15,10 +15,7 @@ export async function POST(request: Request) {
 
   try {
     const ip = getClientIp(request);
-    const { limited, remaining, reset } = isRateLimited(
-      `carbon-coach:${ip}`,
-      RATE_LIMIT_CONFIG
-    );
+    const { limited, remaining, reset } = isRateLimited(`carbon-coach:${ip}`, RATE_LIMIT_CONFIG);
 
     responseHeaders = {
       'X-RateLimit-Limit': String(RATE_LIMIT_CONFIG.limit),
@@ -33,12 +30,12 @@ export async function POST(request: Request) {
     if (limited) {
       return NextResponse.json(
         { error: 'Too many requests. Please wait before messaging the coach again.' },
-        { 
-          status: 429, 
+        {
+          status: 429,
           headers: {
             ...responseHeaders,
             'Retry-After': String(reset)
-          } 
+          }
         }
       );
     }

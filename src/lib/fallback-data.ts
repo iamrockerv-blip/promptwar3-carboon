@@ -1,4 +1,13 @@
-import { CarbonTwin, QuizAnswer, CarbonBreakdown, TimelineProjection, EarthConsequence, GreenFutureComparison, ChatMessage, CarbonAura } from '@/types';
+import {
+  CarbonTwin,
+  QuizAnswer,
+  CarbonBreakdown,
+  TimelineProjection,
+  EarthConsequence,
+  GreenFutureComparison,
+  ChatMessage,
+  CarbonAura
+} from '@/types';
 import { getAvailableShifts } from '@/lib/simulator-options';
 import { COACH_MESSAGES } from '@/lib/constants';
 
@@ -16,7 +25,11 @@ export function createFallbackTwin(
     id: `fallback-rec-${i}`,
     category: shift.category,
     action: shift.label,
-    impact: (shift.difficulty === 'hard' ? 'high' : shift.difficulty === 'moderate' ? 'medium' : 'low') as 'high' | 'medium' | 'low',
+    impact: (shift.difficulty === 'hard'
+      ? 'high'
+      : shift.difficulty === 'moderate'
+        ? 'medium'
+        : 'low') as 'high' | 'medium' | 'low',
     co2Saved: shift.co2Reduction,
     difficulty: shift.difficulty,
     timeframe: 'short-term' as const
@@ -26,7 +39,8 @@ export function createFallbackTwin(
     id: `twin-fallback-${crypto.randomUUID()}`,
     score,
     aura,
-    impactLevel: score <= 2.3 ? 'low' : score <= 4.7 ? 'moderate' : score <= 14.0 ? 'high' : 'critical',
+    impactLevel:
+      score <= 2.3 ? 'low' : score <= 4.7 ? 'moderate' : score <= 14.0 ? 'high' : 'critical',
     sustainabilityRating: Math.max(0, Math.min(100, Math.round((20 - score) * 5))),
     breakdown,
     projections,
@@ -35,7 +49,7 @@ export function createFallbackTwin(
     auraExplanation: `Based on your quiz answers, you have been assigned the ${aura.toUpperCase()} Aura. This indicates an annual footprint of ${score} tonnes of CO2e.`,
     lifeReplay: {
       narrative: `You emit ${score} tonnes of CO2e per year. Commuting, home energy, and shopping shape your digital twin. Transitioning your primary habits could decrease your carbon footprint drastically.`,
-      chapters: allShifts.slice(0, 3).map(shift => ({
+      chapters: allShifts.slice(0, 3).map((shift) => ({
         title: shift.label,
         body: shift.description,
         icon: shift.icon,

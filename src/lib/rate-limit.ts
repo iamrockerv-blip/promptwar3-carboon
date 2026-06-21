@@ -9,15 +9,18 @@ const rateLimitMap = new Map<string, RateLimitRecord>();
 const MAX_RATE_LIMIT_KEYS = 10_000;
 
 export interface RateLimitConfig {
-  limit: number;      // Maximum requests in the window
-  windowMs: number;   // Window size in milliseconds
+  limit: number; // Maximum requests in the window
+  windowMs: number; // Window size in milliseconds
 }
 
 /**
  * Checks if a given IP address has exceeded its rate limit.
  * Key-based implementation that scales in-memory.
  */
-export function isRateLimited(ip: string, config: RateLimitConfig): {
+export function isRateLimited(
+  ip: string,
+  config: RateLimitConfig
+): {
   limited: boolean;
   remaining: number;
   reset: number;
@@ -46,13 +49,13 @@ export function isRateLimited(ip: string, config: RateLimitConfig): {
   if (!record || now >= record.resetTime) {
     const newRecord: RateLimitRecord = {
       count: 1,
-      resetTime: now + config.windowMs,
+      resetTime: now + config.windowMs
     };
     rateLimitMap.set(ip, newRecord);
     return {
       limited: false,
       remaining: config.limit - 1,
-      reset: Math.ceil(config.windowMs / 1000),
+      reset: Math.ceil(config.windowMs / 1000)
     };
   }
 
@@ -60,7 +63,7 @@ export function isRateLimited(ip: string, config: RateLimitConfig): {
     return {
       limited: true,
       remaining: 0,
-      reset: Math.ceil((record.resetTime - now) / 1000),
+      reset: Math.ceil((record.resetTime - now) / 1000)
     };
   }
 
@@ -68,7 +71,7 @@ export function isRateLimited(ip: string, config: RateLimitConfig): {
   return {
     limited: false,
     remaining: config.limit - record.count,
-    reset: Math.ceil((record.resetTime - now) / 1000),
+    reset: Math.ceil((record.resetTime - now) / 1000)
   };
 }
 

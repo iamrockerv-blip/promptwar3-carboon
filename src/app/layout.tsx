@@ -1,44 +1,37 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
+import './globals.css';
 
 const inter = localFont({
-  src: "../../public/fonts/inter.woff2",
-  variable: "--font-inter",
-  display: "swap",
+  src: '../../public/fonts/inter.woff2',
+  variable: '--font-inter',
+  display: 'swap'
 });
 
 const outfit = localFont({
-  src: "../../public/fonts/outfit.woff2",
-  variable: "--font-outfit",
-  display: "swap",
+  src: '../../public/fonts/outfit.woff2',
+  variable: '--font-outfit',
+  display: 'swap'
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Carbon Twin AI™ | Digital Footprint Simulator",
-    template: "%s | Carbon Twin AI™",
+    default: 'Carbon Twin AI™ | Digital Footprint Simulator',
+    template: '%s | Carbon Twin AI™'
   },
-  description: "Calculate your annual carbon footprint, visualize planetary consequences, and simulate lifestyle habit shifts in real-time.",
-  applicationName: "Carbon Twin AI",
-  keywords: [
-    "carbon footprint calculator",
-    "digital twin",
-    "climate simulator",
-    "sustainability"
-  ],
+  description:
+    'Calculate your annual carbon footprint, visualize planetary consequences, and simulate lifestyle habit shifts in real-time.',
+  applicationName: 'Carbon Twin AI',
+  keywords: ['carbon footprint calculator', 'digital twin', 'climate simulator', 'sustainability']
 };
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${outfit.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${inter.variable} ${outfit.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <a href="#main-content" className="skip-link">
           Skip to main content

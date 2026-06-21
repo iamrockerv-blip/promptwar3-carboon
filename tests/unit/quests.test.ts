@@ -20,22 +20,56 @@ describe('Aura Purification Quests Integration', () => {
   it('should generate appropriate purification quests based on answers', () => {
     const quests = getAvailableQuests(sampleAnswers);
     expect(quests).toHaveLength(3);
-    
+
     // Transport quest for car_petrol should be Transit Guardian
-    const transportQuest = quests.find(q => q.category === 'transport');
+    const transportQuest = quests.find((q) => q.category === 'transport');
     expect(transportQuest?.label).toBe('Transit Guardian');
     expect(transportQuest?.co2SavedKg).toBe(9.8);
 
     // Diet quest for meat_regular should be Plant-Based Pioneer
-    const dietQuest = quests.find(q => q.category === 'diet');
+    const dietQuest = quests.find((q) => q.category === 'diet');
     expect(dietQuest?.label).toBe('Plant-Based Pioneer');
     expect(dietQuest?.co2SavedKg).toBe(4.1);
 
     // Energy quest for grid_gas should be Watt Whisperer
-    const energyQuest = quests.find(q => q.category === 'energy');
+    const energyQuest = quests.find((q) => q.category === 'energy');
     expect(energyQuest?.label).toBe('Watt Whisperer');
     expect(energyQuest?.co2SavedKg).toBe(4.6);
   });
+
+  it.each([
+    {
+      transport: 'car_electric',
+      diet: 'vegan',
+      energy: 'solar_mix',
+      expected: ['Active Pedestrian', 'Vegan Explorer', 'Unplug Advocate']
+    },
+    {
+      transport: 'public_transit',
+      diet: 'vegetarian',
+      energy: 'heat_pump',
+      expected: ['Commute Champion', 'Vegan Explorer', 'Unplug Advocate']
+    },
+    {
+      transport: 'bike_walk',
+      diet: 'meat_lover',
+      energy: 'oil_wood',
+      expected: ['Commute Champion', 'Plant-Based Pioneer', 'Watt Whisperer']
+    }
+  ])(
+    'covers alternative quest branches for $transport',
+    ({ transport, diet, energy, expected }) => {
+      const answers: QuizAnswer[] = [
+        { questionId: 'q1', category: 'transport', value: transport },
+        { questionId: 'q2', category: 'diet', value: diet },
+        { questionId: 'q3', category: 'energy', value: energy },
+        { questionId: 'q4', category: 'travel', value: 'never' },
+        { questionId: 'q5', category: 'consumption', value: 'minimalist' }
+      ];
+
+      expect(getAvailableQuests(answers).map((quest) => quest.label)).toEqual(expected);
+    }
+  );
 
   it('should toggle quest completion, update totalCarbonSavedKg and reduce twin score in the store', async () => {
     const store = useCarbonStore.getState();
@@ -57,7 +91,7 @@ describe('Aura Purification Quests Integration', () => {
     expect(updatedStore.totalCarbonSavedKg).toBe(targetQuestCo2);
 
     // Score should be reduced by targetQuestCo2 / 1000 tonnes
-    const expectedScore = Math.max(0.1, Math.round((7.2 - (targetQuestCo2 / 1000)) * 1000) / 1000);
+    const expectedScore = Math.max(0.1, Math.round((7.2 - targetQuestCo2 / 1000) * 1000) / 1000);
     expect(updatedStore.twin?.score).toBe(expectedScore);
 
     // Uncomplete the quest

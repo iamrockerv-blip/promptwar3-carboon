@@ -9,7 +9,7 @@ interface Globe3DProps {
   size?: number; // Canvas size dimension
 }
 
-const EARTH_TILT_RADIAN = 22 * Math.PI / 180;
+const EARTH_TILT_RADIAN = (22 * Math.PI) / 180;
 const ROTATION_SPEED_Y = 0.006;
 const SPHERE_RADIUS = 1.0;
 const LATITUDE_BANDS = 64;
@@ -90,11 +90,7 @@ function parseColorToRGB(colorStr: string): [number, number, number] {
   if (colorStr.startsWith('rgb')) {
     const matches = colorStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
     if (matches) {
-      return [
-        parseInt(matches[1]) / 255,
-        parseInt(matches[2]) / 255,
-        parseInt(matches[3]) / 255
-      ];
+      return [parseInt(matches[1]) / 255, parseInt(matches[2]) / 255, parseInt(matches[3]) / 255];
     }
   }
   return [0.2, 0.5, 0.9];
@@ -108,16 +104,16 @@ function hslToRgb(h: number, s: number, l: number): [number, number, number] {
     const hue2rgb = (p: number, q: number, t: number) => {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
-      if (t < 1/6) return p + (q - p) * 6 * t;
-      if (t < 1/2) return q;
-      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
       return p;
     };
     const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
     const p = 2 * l - q;
-    r = hue2rgb(p, q, h + 1/3);
+    r = hue2rgb(p, q, h + 1 / 3);
     g = hue2rgb(p, q, h);
-    b = hue2rgb(p, q, h - 1/3);
+    b = hue2rgb(p, q, h - 1 / 3);
   }
   return [r, g, b];
 }
@@ -127,10 +123,22 @@ function makePerspective(fieldOfViewInRadians: number, aspect: number, near: num
   const f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
   const rangeInv = 1.0 / (near - far);
   return [
-    f / aspect, 0, 0, 0,
-    0, f, 0, 0,
-    0, 0, (near + far) * rangeInv, -1,
-    0, 0, near * far * rangeInv * 2, 0
+    f / aspect,
+    0,
+    0,
+    0,
+    0,
+    f,
+    0,
+    0,
+    0,
+    0,
+    (near + far) * rangeInv,
+    -1,
+    0,
+    0,
+    near * far * rangeInv * 2,
+    0
   ];
 }
 
@@ -152,7 +160,9 @@ export default function Globe3D({ color, shadowColor, size = 200 }: Globe3DProps
     if (!canvas) return;
 
     // 1. Initialize WebGL Context
-    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl') as WebGLRenderingContext | null;
+    const gl =
+      canvas.getContext('webgl') ||
+      (canvas.getContext('experimental-webgl') as WebGLRenderingContext | null);
     if (!gl) return;
 
     canvas.width = size;
@@ -265,7 +275,17 @@ export default function Globe3D({ color, shadowColor, size = 200 }: Globe3DProps
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
     // Load placeholder single pixel texture while loading image
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 255]));
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.RGBA,
+      1,
+      1,
+      0,
+      gl.RGBA,
+      gl.UNSIGNED_BYTE,
+      new Uint8Array([0, 0, 0, 255])
+    );
 
     // Configure wrapping and filtering
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -311,10 +331,22 @@ export default function Globe3D({ color, shadowColor, size = 200 }: Globe3DProps
 
       // Model-View Matrix representing translation + Y-axis spin + X-axis tilt
       const mvMatrix = [
-        cosY, sinX * sinY, cosX * -sinY, 0,
-        0, cosX, sinX, 0,
-        sinY, -sinX * cosY, cosX * cosY, 0,
-        0, 0, -3.4, 1 // Translated back by 3.4 units to prevent top/bottom viewport clipping and ensure a perfectly round globe
+        cosY,
+        sinX * sinY,
+        cosX * -sinY,
+        0,
+        0,
+        cosX,
+        sinX,
+        0,
+        sinY,
+        -sinX * cosY,
+        cosX * cosY,
+        0,
+        0,
+        0,
+        -3.4,
+        1 // Translated back by 3.4 units to prevent top/bottom viewport clipping and ensure a perfectly round globe
       ];
 
       // Pass variables into shader uniforms
@@ -348,10 +380,10 @@ export default function Globe3D({ color, shadowColor, size = 200 }: Globe3DProps
   // Fallback rendering UI when WebGL is unsupported or texture is loading
   if (!webGLSupported) {
     return (
-      <div 
+      <div
         className="rounded-full animate-pulse transition-all duration-500"
-        style={{ 
-          width: `${size}px`, 
+        style={{
+          width: `${size}px`,
           height: `${size}px`,
           background: `radial-gradient(circle, ${color} 0%, transparent 80%)`,
           boxShadow: `0 0 35px ${shadowColor}`
@@ -361,16 +393,19 @@ export default function Globe3D({ color, shadowColor, size = 200 }: Globe3DProps
   }
 
   return (
-    <div className="relative flex items-center justify-center" style={{ width: `${size}px`, height: `${size}px` }}>
+    <div
+      className="relative flex items-center justify-center"
+      style={{ width: `${size}px`, height: `${size}px` }}
+    >
       {/* Fallback Glassmorphic circle while image loads */}
       {!textureLoaded && (
-        <div 
+        <div
           className="absolute inset-2 rounded-full border border-white/10 animate-pulse bg-neutral-950/40 backdrop-blur-sm"
           style={{ boxShadow: `inset 0 0 20px ${shadowColor}` }}
         />
       )}
-      <canvas 
-        ref={canvasRef} 
+      <canvas
+        ref={canvasRef}
         className="select-none pointer-events-none block"
         style={{ width: `${size}px`, height: `${size}px` }}
       />

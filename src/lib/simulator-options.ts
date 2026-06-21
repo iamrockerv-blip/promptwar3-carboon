@@ -12,11 +12,11 @@ export function getAvailableShifts(
 ): HabitShift[] {
   const shifts: HabitShift[] = [];
 
-  const transportAnswer = answers.find(a => a.category === 'transport')?.value as string;
-  const dietAnswer = answers.find(a => a.category === 'diet')?.value as string;
-  const energyAnswer = answers.find(a => a.category === 'energy')?.value as string;
-  const travelAnswer = answers.find(a => a.category === 'travel')?.value as string;
-  const consumptionAnswer = answers.find(a => a.category === 'consumption')?.value as string;
+  const transportAnswer = answers.find((a) => a.category === 'transport')?.value as string;
+  const dietAnswer = answers.find((a) => a.category === 'diet')?.value as string;
+  const energyAnswer = answers.find((a) => a.category === 'energy')?.value as string;
+  const travelAnswer = answers.find((a) => a.category === 'travel')?.value as string;
+  const consumptionAnswer = answers.find((a) => a.category === 'consumption')?.value as string;
 
   // 1. Transport Shifts
   if (transportAnswer === 'car_petrol') {
@@ -159,7 +159,8 @@ export function getAvailableShifts(
       id: 'eliminate-flights',
       category: 'travel',
       label: 'Eliminate flights',
-      description: 'Avoid commercial aviation entirely, using rail or electric vehicles for travel.',
+      description:
+        'Avoid commercial aviation entirely, using rail or electric vehicles for travel.',
       co2Reduction: breakdown.travel,
       enabled: false,
       icon: '🌍',

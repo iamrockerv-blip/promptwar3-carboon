@@ -5,7 +5,11 @@ export async function generateTwinApi(
   aura: string,
   breakdown: CarbonBreakdown,
   answers: QuizAnswer[]
-): Promise<{ auraExplanation: string; lifeReplay: CarbonLifeReplay; recommendations: Recommendation[] }> {
+): Promise<{
+  auraExplanation: string;
+  lifeReplay: CarbonLifeReplay;
+  recommendations: Recommendation[];
+}> {
   const response = await fetch('/api/generate-twin', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  ApiRequestError,
-  createApiErrorResponse,
-  readJsonBody
-} from '@/lib/api-security';
+import { ApiRequestError, createApiErrorResponse, readJsonBody } from '@/lib/api-security';
 import { z } from 'zod';
 
 describe('API request security helpers', () => {

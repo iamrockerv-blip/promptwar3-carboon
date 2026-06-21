@@ -47,19 +47,15 @@ export default function TwinProfile() {
   ].sort((a, b) => a.value - b.value);
 
   return (
-    <div 
-      id="twin-profile"
-      className="w-full"
-    >
+    <div id="twin-profile" className="w-full">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
         {/* Left Column: Aura Orb & Identity */}
         <div className="lg:col-span-5 flex flex-col items-center text-center p-6 rounded-3xl bg-neutral-900/40 border border-white/5 backdrop-blur-xl">
           <div className="mb-6 relative w-48 h-48 flex items-center justify-center">
-            <Globe3D 
-              color={auraDef.glowColor.replace(/hsla?\(([^,]+,[^,]+,[^,]+),[^)]+\)/, 'hsl($1)')} 
-              shadowColor={auraDef.glowColor} 
-              size={192} 
+            <Globe3D
+              color={auraDef.glowColor.replace(/hsla?\(([^,]+,[^,]+,[^,]+),[^)]+\)/, 'hsl($1)')}
+              shadowColor={auraDef.glowColor}
+              size={192}
             />
           </div>
 
@@ -69,10 +65,10 @@ export default function TwinProfile() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-3"
           >
-            <span 
+            <span
               className="px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider border inline-flex items-center gap-1.5"
-              style={{ 
-                color: auraDef.glowColor, 
+              style={{
+                color: auraDef.glowColor,
                 borderColor: getAuraColorWithAlpha(auraDef.glowColor, 0.4),
                 backgroundColor: getAuraColorWithAlpha(auraDef.glowColor, 0.1)
               }}
@@ -101,7 +97,7 @@ export default function TwinProfile() {
             <div>
               <p className="text-xs text-neutral-500 uppercase tracking-wider">Rating</p>
               <p className="text-3xl font-black text-green-400 mt-1">
-                {Math.round(Math.max(5, 100 - (currentScore * 5)))}
+                {Math.round(Math.max(5, 100 - currentScore * 5))}
                 <span className="text-sm font-normal text-neutral-400 ml-0.5">/100</span>
               </p>
             </div>
@@ -110,7 +106,6 @@ export default function TwinProfile() {
 
         {/* Right Column: Breakdown Chart & Benchmarking */}
         <div className="lg:col-span-7 space-y-8">
-          
           {/* Categorical Breakdown */}
           <div className="p-6 rounded-3xl bg-neutral-900/40 border border-white/5 backdrop-blur-xl">
             <div className="flex items-center justify-between mb-6">
@@ -134,13 +129,15 @@ export default function TwinProfile() {
             {/* Custom Interactive Legend */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-4">
               {breakdownData.map((item) => (
-                <div 
-                  key={item.name} 
+                <div
+                  key={item.name}
                   className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/5"
                 >
                   <span className="text-sm">{item.icon}</span>
                   <div className="min-w-0">
-                    <p className="text-[10px] text-neutral-500 uppercase tracking-wider truncate">{item.name}</p>
+                    <p className="text-[10px] text-neutral-500 uppercase tracking-wider truncate">
+                      {item.name}
+                    </p>
                     <p className="text-sm font-bold text-white">{item.value.toFixed(1)}t</p>
                   </div>
                 </div>
@@ -159,24 +156,26 @@ export default function TwinProfile() {
               {benchmarks.map((bench) => (
                 <div key={bench.label} className="relative">
                   <div className="flex justify-between items-center text-xs mb-1">
-                    <span className={`font-semibold ${bench.active ? 'text-green-400 font-bold' : 'text-neutral-400'}`}>
+                    <span
+                      className={`font-semibold ${bench.active ? 'text-green-400 font-bold' : 'text-neutral-400'}`}
+                    >
                       {bench.label} {bench.active && '(You)'}
                     </span>
                     <span className={`font-bold ${bench.active ? 'text-green-400' : 'text-white'}`}>
                       {bench.value.toFixed(1)} t CO₂e
                     </span>
                   </div>
-                  
+
                   {/* Progress bar line */}
                   <div className="h-2 w-full bg-neutral-800 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className={`h-full rounded-full transition-all duration-1000 ${
-                        bench.active 
-                          ? 'bg-gradient-to-r from-green-400 to-emerald-500' 
-                          : bench.value <= 2.3 
-                            ? 'bg-emerald-500/70' 
-                            : bench.value <= 4.7 
-                              ? 'bg-blue-500/70' 
+                        bench.active
+                          ? 'bg-gradient-to-r from-green-400 to-emerald-500'
+                          : bench.value <= 2.3
+                            ? 'bg-emerald-500/70'
+                            : bench.value <= 4.7
+                              ? 'bg-blue-500/70'
                               : 'bg-red-500/70'
                       }`}
                       style={{ width: `${Math.min(100, (bench.value / 18) * 100)}%` }}
@@ -187,9 +186,7 @@ export default function TwinProfile() {
               ))}
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
   );

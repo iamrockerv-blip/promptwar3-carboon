@@ -4,18 +4,18 @@ import { useState, useEffect } from 'react';
 import { m } from 'framer-motion';
 
 const DIAGNOSTIC_LOGS = [
-  ">> [SYS] INITIALIZING DIGITAL TWIN ENGINE MATRIX...",
-  ">> [SYS] MOUNTING LIFESTYLE DATA STRUCTURES...",
-  ">> [SYS] RUNNING COMPARATIVE LIFE CYCLE ASSESSMENTS...",
-  ">> [SYS] LOADING UK DEFRA 2024 TRANSPORT INDICES...",
-  ">> [SYS] PARSING POORE & NEMECEK (2018 SCIENCE) LCA DATA...",
-  ">> [SYS] RESOLVING IEA NATIONAL GRID CARBON COEFFICIENTS...",
-  ">> [SYS] SIMULATING DECADE EMISSIONS ACCUMULATION...",
-  ">> [SYS] COMPILING ATMOSPHERE MELT PROJECTIONS...",
-  ">> [SYS] CALCULATING CARBON AURA Paris-1.5°C COMPLIANCE...",
-  ">> [SYS] INJECTING AI CARBON COACH STRATEGY NODE...",
-  ">> [SYS] SYNCHRONIZING CLIENT-SIDE LOCAL STORAGE STATE...",
-  ">> [SYS] DIGITAL TWIN GENERATION COMPLETE. READY TO CHOOSE CORE."
+  '>> [SYS] INITIALIZING DIGITAL TWIN ENGINE MATRIX...',
+  '>> [SYS] MOUNTING LIFESTYLE DATA STRUCTURES...',
+  '>> [SYS] RUNNING COMPARATIVE LIFE CYCLE ASSESSMENTS...',
+  '>> [SYS] LOADING UK DEFRA 2024 TRANSPORT INDICES...',
+  '>> [SYS] PARSING POORE & NEMECEK (2018 SCIENCE) LCA DATA...',
+  '>> [SYS] RESOLVING IEA NATIONAL GRID CARBON COEFFICIENTS...',
+  '>> [SYS] SIMULATING DECADE EMISSIONS ACCUMULATION...',
+  '>> [SYS] COMPILING ATMOSPHERE MELT PROJECTIONS...',
+  '>> [SYS] CALCULATING CARBON AURA Paris-1.5°C COMPLIANCE...',
+  '>> [SYS] INJECTING AI CARBON COACH STRATEGY NODE...',
+  '>> [SYS] SYNCHRONIZING CLIENT-SIDE LOCAL STORAGE STATE...',
+  '>> [SYS] DIGITAL TWIN GENERATION COMPLETE. READY TO CHOOSE CORE.'
 ];
 
 export default function LoadingState() {
@@ -24,10 +24,13 @@ export default function LoadingState() {
 
   useEffect(() => {
     if (activeLogIndex < DIAGNOSTIC_LOGS.length) {
-      const timer = setTimeout(() => {
-        setLogs((prev) => [...prev, DIAGNOSTIC_LOGS[activeLogIndex]]);
-        setActiveLogIndex((prev) => prev + 1);
-      }, 450 + Math.random() * 250); // Slightly varied typing speed
+      const timer = setTimeout(
+        () => {
+          setLogs((prev) => [...prev, DIAGNOSTIC_LOGS[activeLogIndex]]);
+          setActiveLogIndex((prev) => prev + 1);
+        },
+        450 + Math.random() * 250
+      ); // Slightly varied typing speed
       return () => clearTimeout(timer);
     }
   }, [activeLogIndex]);
@@ -43,7 +46,6 @@ export default function LoadingState() {
 
       {/* Cybernetic Terminal Console */}
       <div className="w-full max-w-xl p-6 rounded-3xl bg-black/80 border border-emerald-500/25 backdrop-blur-2xl shadow-[0_0_50px_rgba(16,185,129,0.08)] flex flex-col gap-5 relative z-10 font-mono text-left">
-        
         {/* Terminal Header */}
         <div className="flex items-center justify-between border-b border-white/5 pb-3">
           <div className="flex items-center gap-2" aria-hidden="true">
@@ -67,7 +69,9 @@ export default function LoadingState() {
           </div>
           <div className="min-w-0">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider">
-              {activeLogIndex < DIAGNOSTIC_LOGS.length ? 'Compiling Lifestyle Clone...' : 'Completing Setup...'}
+              {activeLogIndex < DIAGNOSTIC_LOGS.length
+                ? 'Compiling Lifestyle Clone...'
+                : 'Completing Setup...'}
             </h4>
             <p className="text-[10px] text-neutral-400 truncate mt-0.5">
               Please wait while the simulation model builds.
@@ -76,7 +80,10 @@ export default function LoadingState() {
         </div>
 
         {/* Terminal Logs Output Stream */}
-        <div className="h-64 overflow-y-auto bg-black/60 p-4 rounded-xl border border-white/5 flex flex-col gap-2 font-mono text-[11px] text-emerald-400 select-none scrollbar-none" aria-hidden="true">
+        <div
+          className="h-64 overflow-y-auto bg-black/60 p-4 rounded-xl border border-white/5 flex flex-col gap-2 font-mono text-[11px] text-emerald-400 select-none scrollbar-none"
+          aria-hidden="true"
+        >
           {logs.map((log) => (
             <div key={log} className="leading-relaxed">
               <span className="text-emerald-500 font-bold">{log}</span>
@@ -85,12 +92,13 @@ export default function LoadingState() {
           {/* Typing caret animation for the active line */}
           {activeLogIndex < DIAGNOSTIC_LOGS.length && (
             <div className="flex items-center gap-1">
-              <span className="text-emerald-500/60 font-bold">&gt;&gt; [SYS] Processing node...</span>
+              <span className="text-emerald-500/60 font-bold">
+                &gt;&gt; [SYS] Processing node...
+              </span>
               <span className="w-1.5 h-3 bg-emerald-400 animate-pulse" />
             </div>
           )}
         </div>
-
       </div>
     </output>
   );

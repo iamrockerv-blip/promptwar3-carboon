@@ -26,31 +26,39 @@ describe('request validation schemas', () => {
   });
 
   it('rejects negative values, unknown fields, and duplicate categories', () => {
-    expect(() => GenerateTwinInputSchema.parse({
-      ...validTwinInput,
-      score: -1
-    })).toThrow();
+    expect(() =>
+      GenerateTwinInputSchema.parse({
+        ...validTwinInput,
+        score: -1
+      })
+    ).toThrow();
 
-    expect(() => GenerateTwinInputSchema.parse({
-      ...validTwinInput,
-      unexpected: true
-    })).toThrow();
+    expect(() =>
+      GenerateTwinInputSchema.parse({
+        ...validTwinInput,
+        unexpected: true
+      })
+    ).toThrow();
 
-    expect(() => GenerateTwinInputSchema.parse({
-      ...validTwinInput,
-      answers: validTwinInput.answers.map((answer) => ({
-        ...answer,
-        category: 'transport'
-      }))
-    })).toThrow();
+    expect(() =>
+      GenerateTwinInputSchema.parse({
+        ...validTwinInput,
+        answers: validTwinInput.answers.map((answer) => ({
+          ...answer,
+          category: 'transport'
+        }))
+      })
+    ).toThrow();
 
-    expect(() => GenerateTwinInputSchema.parse({
-      ...validTwinInput,
-      answers: validTwinInput.answers.map((answer) => ({
-        ...answer,
-        questionId: 'duplicate'
-      }))
-    })).toThrow();
+    expect(() =>
+      GenerateTwinInputSchema.parse({
+        ...validTwinInput,
+        answers: validTwinInput.answers.map((answer) => ({
+          ...answer,
+          questionId: 'duplicate'
+        }))
+      })
+    ).toThrow();
   });
 
   it('trims coach messages and bounds conversation history', () => {
@@ -60,14 +68,16 @@ describe('request validation schemas', () => {
     });
 
     expect(parsed.message).toBe('Help me reduce travel emissions.');
-    expect(() => CoachInputSchema.parse({
-      message: 'Hello',
-      history: Array.from({ length: 21 }, (_, index) => ({
-        id: String(index),
-        sender: 'user',
-        text: 'Message',
-        timestamp: new Date().toISOString()
-      }))
-    })).toThrow();
+    expect(() =>
+      CoachInputSchema.parse({
+        message: 'Hello',
+        history: Array.from({ length: 21 }, (_, index) => ({
+          id: String(index),
+          sender: 'user',
+          text: 'Message',
+          timestamp: new Date().toISOString()
+        }))
+      })
+    ).toThrow();
   });
 });

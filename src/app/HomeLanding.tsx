@@ -5,11 +5,14 @@ import { LazyMotion, domMax, MotionConfig } from 'framer-motion';
 import Hero from '@/components/landing/Hero';
 
 export default function HomeLanding() {
-
   return (
     <LazyMotion features={domMax}>
       <MotionConfig reducedMotion="user">
-        <main id="main-content" tabIndex={-1} className="min-h-screen relative bg-bg-primary overflow-x-hidden">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="min-h-screen relative bg-bg-primary overflow-x-hidden"
+        >
           <Hero />
         </main>
       </MotionConfig>

@@ -24,45 +24,72 @@ export default function BreakdownChart({ data }: BreakdownChartProps) {
 
   if (!recharts) {
     return (
-      <div className="h-[250px] w-full flex items-center justify-center text-zinc-500 bg-zinc-900/10 rounded-xl border border-zinc-800/10">
+      <output
+        className="h-[250px] w-full flex items-center justify-center text-zinc-500 bg-zinc-900/10 rounded-xl border border-zinc-800/10"
+        aria-label="Loading carbon breakdown chart"
+      >
         Loading chart...
-      </div>
+      </output>
     );
   }
 
   const { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } = recharts;
 
   return (
-    <ResponsiveContainer width="100%" height={250}>
-      <BarChart 
-        data={data} 
-        layout="vertical"
-        margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
-      >
-        <XAxis type="number" stroke="#888888" fontSize={12} tickLine={false} />
-        <YAxis 
-          type="category" 
-          dataKey="name" 
-          stroke="#888888" 
-          fontSize={12} 
-          tickLine={false}
-          width={80}
-        />
-        <Tooltip 
-          cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
-          contentStyle={{ 
-            backgroundColor: '#171717', 
-            borderColor: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '12px',
-            color: '#ffffff'
-          }}
-        />
-        <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+    <figure>
+      <figcaption className="sr-only">
+        Annual carbon emissions by lifestyle category in tonnes of CO₂e.
+      </figcaption>
+      <div aria-hidden="true">
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart
+            data={data}
+            layout="vertical"
+            margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
+          >
+            <XAxis type="number" stroke="#888888" fontSize={12} tickLine={false} />
+            <YAxis
+              type="category"
+              dataKey="name"
+              stroke="#888888"
+              fontSize={12}
+              tickLine={false}
+              width={80}
+            />
+            <Tooltip
+              cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
+              contentStyle={{
+                backgroundColor: '#171717',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                color: '#ffffff'
+              }}
+            />
+            <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+              {data.map((entry) => (
+                <Cell key={`cell-${entry.name}`} fill={entry.color} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      <table className="sr-only">
+        <caption>Annual carbon emissions by category</caption>
+        <thead>
+          <tr>
+            <th scope="col">Category</th>
+            <th scope="col">Tonnes CO₂e per year</th>
+          </tr>
+        </thead>
+        <tbody>
           {data.map((entry) => (
-            <Cell key={`cell-${entry.name}`} fill={entry.color} />
+            <tr key={entry.name}>
+              <th scope="row">{entry.name}</th>
+              <td>{entry.value.toFixed(1)}</td>
+            </tr>
           ))}
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
+        </tbody>
+      </table>
+    </figure>
   );
 }

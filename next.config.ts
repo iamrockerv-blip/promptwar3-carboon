@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -56,12 +56,14 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
+  poweredByHeader: false,
   async headers() {
     return [
       {
         source: '/:path*',
-        headers: securityHeaders,
-      },
+        headers: securityHeaders
+      }
     ];
   },
   async redirects() {
@@ -69,10 +71,10 @@ const nextConfig: NextConfig = {
       {
         source: '/methodology',
         destination: '/science',
-        permanent: true,
-      },
+        permanent: true
+      }
     ];
-  },
+  }
 };
 
 export default nextConfig;

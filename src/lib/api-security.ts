@@ -29,30 +29,18 @@ export async function readJsonBody(
 
   const contentLength = Number(request.headers.get('content-length'));
   if (Number.isFinite(contentLength) && contentLength > maxBytes) {
-    throw new ApiRequestError(
-      'Request body is too large.',
-      413,
-      'PAYLOAD_TOO_LARGE'
-    );
+    throw new ApiRequestError('Request body is too large.', 413, 'PAYLOAD_TOO_LARGE');
   }
 
   const rawBody = await request.text();
   if (new TextEncoder().encode(rawBody).byteLength > maxBytes) {
-    throw new ApiRequestError(
-      'Request body is too large.',
-      413,
-      'PAYLOAD_TOO_LARGE'
-    );
+    throw new ApiRequestError('Request body is too large.', 413, 'PAYLOAD_TOO_LARGE');
   }
 
   try {
     return JSON.parse(rawBody);
   } catch {
-    throw new ApiRequestError(
-      'Request body must contain valid JSON.',
-      400,
-      'INVALID_JSON'
-    );
+    throw new ApiRequestError('Request body must contain valid JSON.', 400, 'INVALID_JSON');
   }
 }
 

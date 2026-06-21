@@ -1,14 +1,20 @@
 // src/lib/carbon-engine.ts
-import { 
-  QuizAnswer, 
-  CarbonBreakdown, 
-  CarbonAura, 
-  HabitShift, 
-  TimelineProjection, 
-  EarthConsequence, 
-  GreenFutureComparison 
+import {
+  QuizAnswer,
+  CarbonBreakdown,
+  CarbonAura,
+  HabitShift,
+  TimelineProjection,
+  EarthConsequence,
+  GreenFutureComparison
 } from '@/types';
-import { EMISSION_FACTORS, AURA_THRESHOLDS, CONSEQUENCE_CONSTANTS, SEA_LEVEL_COEFFICIENT, HEALTH_SCORE_CONSTANTS } from './constants';
+import {
+  EMISSION_FACTORS,
+  AURA_THRESHOLDS,
+  CONSEQUENCE_CONSTANTS,
+  SEA_LEVEL_COEFFICIENT,
+  HEALTH_SCORE_CONSTANTS
+} from './constants';
 
 /**
  * Financial proxy estimates (annual cost in USD) based on lifestyle habits.
@@ -16,37 +22,37 @@ import { EMISSION_FACTORS, AURA_THRESHOLDS, CONSEQUENCE_CONSTANTS, SEA_LEVEL_COE
  */
 const FINANCIAL_ESTIMATES = {
   transport: {
-    car_petrol: 3200,      // Petrol, maintenance, insurance
-    car_electric: 1600,    // Charging, lower maintenance
-    public_transit: 900,   // Annual passes
-    bike_walk: 100,        // Gear maintenance
-    remote: 150            // Minor electricity, no travel
+    car_petrol: 3200, // Petrol, maintenance, insurance
+    car_electric: 1600, // Charging, lower maintenance
+    public_transit: 900, // Annual passes
+    bike_walk: 100, // Gear maintenance
+    remote: 150 // Minor electricity, no travel
   },
   diet: {
-    meat_lover: 2600,      // Heavy fresh meat costs
-    meat_regular: 2000,    // Average groceries
-    flexitarian: 1800,     // Reduced meat costs
-    pescatarian: 1900,     // Seafood premiums
-    vegetarian: 1500,      // Plant/dairy mix
-    vegan: 1300            // Plant-only, bulk purchasing
+    meat_lover: 2600, // Heavy fresh meat costs
+    meat_regular: 2000, // Average groceries
+    flexitarian: 1800, // Reduced meat costs
+    pescatarian: 1900, // Seafood premiums
+    vegetarian: 1500, // Plant/dairy mix
+    vegan: 1300 // Plant-only, bulk purchasing
   },
   energy: {
-    grid_gas: 2200,        // High grid utility rates + heating fuel
-    solar_mix: 800,        // Solar offset, minimal grid draw
-    oil_wood: 2600,        // Heating oil/pellet bills
-    shared_low: 1100       // Low individual consumption
+    grid_gas: 2200, // High grid utility rates + heating fuel
+    solar_mix: 800, // Solar offset, minimal grid draw
+    oil_wood: 2600, // Heating oil/pellet bills
+    shared_low: 1100 // Low individual consumption
   },
   travel: {
     never: 0,
-    flights_1_2: 1200,     // Occasional flights
-    flights_3_5: 4200,     // High flight costs
-    flights_6_plus: 8500   // Luxury flight overhead
+    flights_1_2: 1200, // Occasional flights
+    flights_3_5: 4200, // High flight costs
+    flights_6_plus: 8500 // Luxury flight overhead
   },
   consumption: {
-    minimalist: 500,       // Second-hand, repair focus
-    average: 1600,         // Normal retail spending
-    frequent: 3200,        // Shopping hobbyist
-    luxury: 6500           // High-end electronics & premium fashion
+    minimalist: 500, // Second-hand, repair focus
+    average: 1600, // Normal retail spending
+    frequent: 3200, // Shopping hobbyist
+    luxury: 6500 // High-end electronics & premium fashion
   }
 } as const;
 
@@ -55,7 +61,7 @@ const FINANCIAL_ESTIMATES = {
  */
 export function calculateBreakdown(answers: QuizAnswer[]): CarbonBreakdown {
   const findVal = (cat: keyof CarbonBreakdown, def: string): number => {
-    const ans = answers.find(a => a.category === cat);
+    const ans = answers.find((a) => a.category === cat);
     const factors = EMISSION_FACTORS[cat];
     if (!ans) return factors[def as keyof typeof factors];
     const key = ans.value as keyof typeof factors;
@@ -126,14 +132,16 @@ export function calculateWithShifts(
  */
 export function calculateProjections(score: number): TimelineProjection[] {
   const years = [1, 3, 5, 10];
-  return years.map(year => {
+  return years.map((year) => {
     const cumulativeTonnes = Math.round(score * year * 10) / 10;
     return {
       year,
       cumulativeTonnes,
-      treesRequired: Math.round(cumulativeTonnes / CONSEQUENCE_CONSTANTS.treeAbsorbtionPerYearTonnes),
+      treesRequired: Math.round(
+        cumulativeTonnes / CONSEQUENCE_CONSTANTS.treeAbsorbtionPerYearTonnes
+      ),
       equivalentFlights: Math.round(cumulativeTonnes / CONSEQUENCE_CONSTANTS.flightEmissionTonnes),
-      seaLevelContribution_mm: Math.round((cumulativeTonnes * SEA_LEVEL_COEFFICIENT) * 10000) / 10000
+      seaLevelContribution_mm: Math.round(cumulativeTonnes * SEA_LEVEL_COEFFICIENT * 10000) / 10000
     };
   });
 }
@@ -147,7 +155,9 @@ export function calculateConsequences(score: number): EarthConsequence {
   return {
     populationMultiplier: mult,
     totalAnnualTonnes,
-    treesRequired: Math.round(totalAnnualTonnes / CONSEQUENCE_CONSTANTS.treeAbsorbtionPerYearTonnes),
+    treesRequired: Math.round(
+      totalAnnualTonnes / CONSEQUENCE_CONSTANTS.treeAbsorbtionPerYearTonnes
+    ),
     flightsEquivalent: Math.round(totalAnnualTonnes / CONSEQUENCE_CONSTANTS.flightEmissionTonnes),
     carsEquivalent: Math.round(totalAnnualTonnes / CONSEQUENCE_CONSTANTS.carEmissionPerYearTonnes),
     iceMelt_sqm: Math.round(totalAnnualTonnes * CONSEQUENCE_CONSTANTS.iceMeltPerTonneSqm),
@@ -164,7 +174,7 @@ export function calculateGreenFuture(
   answers: QuizAnswer[]
 ): GreenFutureComparison {
   const getVal = (cat: string): string => {
-    return answers.find(a => a.category === cat)?.value as string || 'average';
+    return (answers.find((a) => a.category === cat)?.value as string) || 'average';
   };
 
   const getCost = (cat: string, val: string): number => {
@@ -184,7 +194,7 @@ export function calculateGreenFuture(
   const consVal = getVal('consumption');
 
   // 1. Current Future Calculations
-  const currentAnnualCost = 
+  const currentAnnualCost =
     getCost('transport', transVal) +
     getCost('diet', dietVal) +
     getCost('energy', energyVal) +
@@ -197,15 +207,22 @@ export function calculateGreenFuture(
   let currentHealth: number = HEALTH_SCORE_CONSTANTS.baseScore;
   if (transVal === 'bike_walk') currentHealth += HEALTH_SCORE_CONSTANTS.bikeWalkBonus;
   if (transVal === 'car_petrol') currentHealth -= HEALTH_SCORE_CONSTANTS.carPetrolPenalty;
-  if (dietVal === 'vegan' || dietVal === 'vegetarian') currentHealth += HEALTH_SCORE_CONSTANTS.veganVegetarianBonus;
+  if (dietVal === 'vegan' || dietVal === 'vegetarian')
+    currentHealth += HEALTH_SCORE_CONSTANTS.veganVegetarianBonus;
   if (dietVal === 'meat_lover') currentHealth -= HEALTH_SCORE_CONSTANTS.meatLoverPenalty;
   currentHealth = Math.min(100, Math.max(HEALTH_SCORE_CONSTANTS.minScore, currentHealth));
 
   // 2. Improved Future Calculations (Optimistic shifts)
   const transShiftMap: Record<string, string> = { car_petrol: 'car_electric' };
-  const dietShiftMap: Record<string, string> = { meat_lover: 'flexitarian', meat_regular: 'flexitarian' };
+  const dietShiftMap: Record<string, string> = {
+    meat_lover: 'flexitarian',
+    meat_regular: 'flexitarian'
+  };
   const energyShiftMap: Record<string, string> = { grid_gas: 'solar_mix', oil_wood: 'solar_mix' };
-  const travelShiftMap: Record<string, string> = { flights_6_plus: 'flights_3_5', flights_3_5: 'flights_1_2' };
+  const travelShiftMap: Record<string, string> = {
+    flights_6_plus: 'flights_3_5',
+    flights_3_5: 'flights_1_2'
+  };
   const consShiftMap: Record<string, string> = { luxury: 'average', frequent: 'average' };
 
   const improvedTrans = transShiftMap[transVal] ?? transVal;
@@ -214,7 +231,7 @@ export function calculateGreenFuture(
   const improvedTravel = travelShiftMap[travelVal] ?? travelVal;
   const improvedCons = consShiftMap[consVal] ?? consVal;
 
-  const improvedAnnualCost = 
+  const improvedAnnualCost =
     getCost('transport', improvedTrans) +
     getCost('diet', improvedDiet) +
     getCost('energy', improvedEnergy) +
@@ -222,11 +239,20 @@ export function calculateGreenFuture(
     getCost('consumption', improvedCons);
 
   const improvedBreakdown: CarbonBreakdown = {
-    transport: EMISSION_FACTORS.transport[improvedTrans as keyof typeof EMISSION_FACTORS.transport] ?? breakdown.transport,
-    diet: EMISSION_FACTORS.diet[improvedDiet as keyof typeof EMISSION_FACTORS.diet] ?? breakdown.diet,
-    energy: EMISSION_FACTORS.energy[improvedEnergy as keyof typeof EMISSION_FACTORS.energy] ?? breakdown.energy,
-    travel: EMISSION_FACTORS.travel[improvedTravel as keyof typeof EMISSION_FACTORS.travel] ?? breakdown.travel,
-    consumption: EMISSION_FACTORS.consumption[improvedCons as keyof typeof EMISSION_FACTORS.consumption] ?? breakdown.consumption
+    transport:
+      EMISSION_FACTORS.transport[improvedTrans as keyof typeof EMISSION_FACTORS.transport] ??
+      breakdown.transport,
+    diet:
+      EMISSION_FACTORS.diet[improvedDiet as keyof typeof EMISSION_FACTORS.diet] ?? breakdown.diet,
+    energy:
+      EMISSION_FACTORS.energy[improvedEnergy as keyof typeof EMISSION_FACTORS.energy] ??
+      breakdown.energy,
+    travel:
+      EMISSION_FACTORS.travel[improvedTravel as keyof typeof EMISSION_FACTORS.travel] ??
+      breakdown.travel,
+    consumption:
+      EMISSION_FACTORS.consumption[improvedCons as keyof typeof EMISSION_FACTORS.consumption] ??
+      breakdown.consumption
   };
 
   const improvedScore = Object.values(improvedBreakdown).reduce((a, b) => a + b, 0);
@@ -237,7 +263,9 @@ export function calculateGreenFuture(
   if (improvedTrans === 'bike_walk') improvedHealth += HEALTH_SCORE_CONSTANTS.improvedBikeWalkBonus;
   improvedHealth = Math.min(HEALTH_SCORE_CONSTANTS.maxScore, improvedHealth);
 
-  const reductionPercentage = Math.round(((currentCo2_5yr - improvedCo2_5yr) / Math.max(0.1, currentCo2_5yr)) * 100);
+  const reductionPercentage = Math.round(
+    ((currentCo2_5yr - improvedCo2_5yr) / Math.max(0.1, currentCo2_5yr)) * 100
+  );
   const moneySaved = currentCost_5yr - improvedCost_5yr;
 
   return {

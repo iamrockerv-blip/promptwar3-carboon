@@ -65,13 +65,13 @@ export default function AuraReveal() {
               <stop offset="100%" stopColor={definition.glowColor} stopOpacity="0" />
             </radialGradient>
           </defs>
-          <circle 
-            cx="100" 
-            cy="100" 
-            r="96" 
-            fill="none" 
-            stroke={`url(#glow-grad-1-${definition.name})`} 
-            strokeWidth="3" 
+          <circle
+            cx="100"
+            cy="100"
+            r="96"
+            fill="none"
+            stroke={`url(#glow-grad-1-${definition.name})`}
+            strokeWidth="3"
           />
         </svg>
       </m.div>
@@ -90,17 +90,16 @@ export default function AuraReveal() {
               <stop offset="100%" stopColor={definition.glowColor} stopOpacity="0" />
             </radialGradient>
           </defs>
-          <circle 
-            cx="100" 
-            cy="100" 
-            r="94" 
-            fill="none" 
-            stroke={`url(#glow-grad-2-${definition.name})`} 
-            strokeWidth="6" 
+          <circle
+            cx="100"
+            cy="100"
+            r="94"
+            fill="none"
+            stroke={`url(#glow-grad-2-${definition.name})`}
+            strokeWidth="6"
           />
         </svg>
       </m.div>
-
 
       <div className="relative z-10 flex flex-col items-center gap-6">
         {/* Scaling core orb */}
