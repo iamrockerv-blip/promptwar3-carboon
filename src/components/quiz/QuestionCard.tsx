@@ -87,6 +87,7 @@ export default function QuestionCard({
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onSelect(option)}
+              aria-label={`${option.label}. ${option.description}`}
               className={`w-full text-left p-5 rounded-2xl flex items-center gap-5 border text-base outline-none cursor-pointer focus:ring-2 focus:ring-accent-sapphire transition-all duration-300 relative group overflow-hidden ${
                 isSelected
                   ? 'bg-gradient-to-r from-accent-sapphire/20 to-accent-emerald/10 border-accent-emerald shadow-[0_0_20px_rgba(16,185,129,0.2)]'

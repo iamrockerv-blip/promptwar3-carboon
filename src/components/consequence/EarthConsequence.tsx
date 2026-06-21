@@ -107,6 +107,8 @@ export default function EarthConsequence() {
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+            aria-controls="earth-impact-details"
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-neutral-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
           >
             {isOpen ? 'Hide Visual Details' : 'Show 10,000x Earth Impact Details'}
@@ -118,6 +120,7 @@ export default function EarthConsequence() {
         <AnimatePresence>
           {isOpen && (
             <m.div
+              id="earth-impact-details"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}

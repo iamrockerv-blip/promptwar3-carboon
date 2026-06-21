@@ -15,8 +15,18 @@ const outfit = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Carbon Twin AI™ | Digital Footprint Simulator",
+  title: {
+    default: "Carbon Twin AI™ | Digital Footprint Simulator",
+    template: "%s | Carbon Twin AI™",
+  },
   description: "Calculate your annual carbon footprint, visualize planetary consequences, and simulate lifestyle habit shifts in real-time.",
+  applicationName: "Carbon Twin AI",
+  keywords: [
+    "carbon footprint calculator",
+    "digital twin",
+    "climate simulator",
+    "sustainability"
+  ],
 };
 
 export default function RootLayout({
@@ -29,7 +39,12 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${outfit.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

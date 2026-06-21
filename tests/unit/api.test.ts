@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { POST as generateTwinPost } from '@/app/api/generate-twin/route';
 import { POST as carbonCoachPost } from '@/app/api/carbon-coach/route';
 import { generateTwinNarrative, generateCoachResponse } from '@/lib/gemini';
+import { clearRateLimitStore } from '@/lib/rate-limit';
 
 // Mock the Gemini API functions
 vi.mock('@/lib/gemini', () => ({
@@ -12,6 +13,7 @@ vi.mock('@/lib/gemini', () => ({
 describe('API Route Integration Tests', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    clearRateLimitStore();
   });
 
   const getUniqueIp = () => {
@@ -140,7 +142,11 @@ describe('API Route Integration Tests', () => {
       expect(res.status).toBe(500);
 
       const data = await res.json();
-      expect(data.error).toBe('AI generation failed');
+      expect(data).toEqual({
+        error: 'Unable to generate the carbon twin right now.',
+        code: 'INTERNAL_ERROR'
+      });
+      expect(JSON.stringify(data)).not.toContain('AI generation failed');
     });
   });
 
@@ -244,7 +250,59 @@ describe('API Route Integration Tests', () => {
       expect(res.status).toBe(500);
 
       const data = await res.json();
-      expect(data.error).toBe('AI response failed');
+      expect(data).toEqual({
+        error: 'Unable to reach the carbon coach right now.',
+        code: 'INTERNAL_ERROR'
+      });
+      expect(JSON.stringify(data)).not.toContain('AI response failed');
     });
+  });
+
+  it('keeps endpoint rate-limit buckets isolated for the same client', async () => {
+    vi.mocked(generateTwinNarrative).mockResolvedValue({
+      auraExplanation: 'Aura explanation',
+      lifeReplay: { narrative: 'Life narrative', chapters: [] },
+      recommendations: []
+    });
+    vi.mocked(generateCoachResponse).mockResolvedValue('Coach advice');
+
+    const clientIp = getUniqueIp();
+    const twinBody = {
+      score: 11.8,
+      aura: 'amber',
+      breakdown: {
+        transport: 4.6,
+        diet: 2.5,
+        energy: 2.5,
+        travel: 1,
+        consumption: 1.2
+      },
+      answers: [
+        { questionId: 'q1', category: 'transport', value: 'car_petrol' },
+        { questionId: 'q2', category: 'diet', value: 'meat_regular' },
+        { questionId: 'q3', category: 'energy', value: 'grid_gas' },
+        { questionId: 'q4', category: 'travel', value: 'flights_1_2' },
+        { questionId: 'q5', category: 'consumption', value: 'average' }
+      ]
+    };
+
+    for (let index = 0; index < 10; index += 1) {
+      await generateTwinPost(new Request('http://localhost/api/generate-twin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-forwarded-for': clientIp },
+        body: JSON.stringify(twinBody)
+      }));
+    }
+
+    const coachResponse = await carbonCoachPost(new Request('http://localhost/api/carbon-coach', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-forwarded-for': clientIp },
+      body: JSON.stringify({
+        message: 'Help me improve.',
+        history: []
+      })
+    }));
+
+    expect(coachResponse.status).toBe(200);
   });
 });

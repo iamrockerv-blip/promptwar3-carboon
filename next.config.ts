@@ -1,9 +1,25 @@
 import type { NextConfig } from "next";
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 const securityHeaders = [
   {
     key: 'Content-Security-Policy',
-    value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' data: https://frontend-cdn.perplexity.ai https://fonts.gstatic.com; connect-src 'self' ws: wss:; frame-ancestors 'none'; object-src 'none';"
+    value: [
+      "default-src 'self'",
+      `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ''}`,
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob:",
+      "font-src 'self' data:",
+      `connect-src 'self'${isDevelopment ? ' ws: wss:' : ''}`,
+      "worker-src 'self' blob:",
+      "manifest-src 'self'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "frame-ancestors 'none'",
+      "object-src 'none'",
+      ...(isDevelopment ? [] : ['upgrade-insecure-requests'])
+    ].join('; ')
   },
   {
     key: 'X-Frame-Options',
@@ -19,11 +35,23 @@ const securityHeaders = [
   },
   {
     key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()'
+    value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=()'
   },
   {
     key: 'Strict-Transport-Security',
     value: 'max-age=63072000; includeSubDomains; preload'
+  },
+  {
+    key: 'Cross-Origin-Opener-Policy',
+    value: 'same-origin'
+  },
+  {
+    key: 'Cross-Origin-Resource-Policy',
+    value: 'same-origin'
+  },
+  {
+    key: 'X-Permitted-Cross-Domain-Policies',
+    value: 'none'
   }
 ];
 

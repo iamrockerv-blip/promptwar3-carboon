@@ -146,7 +146,13 @@ export default function AICoach() {
           <div className="lg:col-span-8 flex flex-col h-[400px] rounded-2xl bg-neutral-950/80 border border-indigo-500/20 shadow-[0_0_20px_rgba(99,102,241,0.05)] overflow-hidden">
             
             {/* Scrollable messages area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-black/40">
+            <div
+              className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-black/40"
+              role="log"
+              aria-live="polite"
+              aria-relevant="additions text"
+              aria-label="Conversation with the AI carbon coach"
+            >
               {coachMessages.map((msg) => {
                 const isCoach = msg.sender === 'coach';
                 return (
@@ -159,6 +165,7 @@ export default function AICoach() {
                         ? 'bg-neutral-900/60 text-white rounded-tl-none border-white/5 shadow-sm' 
                         : 'bg-gradient-to-tr from-indigo-600 to-indigo-800 text-white rounded-tr-none border-indigo-500/30 shadow-[0_4px_12px_rgba(79,70,229,0.35)]'
                     }`}>
+                      <span className="sr-only">{isCoach ? 'Carbon coach:' : 'You:'}</span>
                       {isCoach && (
                         <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-indigo-400 mb-1.5 font-mono">
                           <Sparkles className="w-3 h-3 text-indigo-400" /> 
@@ -172,19 +179,19 @@ export default function AICoach() {
               })}
               
               {isSending && (
-                <div className="flex justify-start">
+                <output className="flex justify-start">
                   <div className="bg-neutral-900/60 text-white rounded-2xl rounded-tl-none p-4 border border-white/5">
                     <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-indigo-400 mb-1.5 font-mono">
                       <Sparkles className="w-3 h-3 text-indigo-400" />
                       <span>COACH_CALCULATING</span>
                     </div>
-                    <div className="flex gap-1.5 items-center py-1">
+                    <div className="flex gap-1.5 items-center py-1" aria-hidden="true">
                       <span className="w-2 h-2 rounded-full bg-indigo-400 animate-smooth-bounce" style={{ animationDelay: '0ms' }} />
                       <span className="w-2 h-2 rounded-full bg-indigo-400 animate-smooth-bounce" style={{ animationDelay: '150ms' }} />
                       <span className="w-2 h-2 rounded-full bg-indigo-400 animate-smooth-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
                   </div>
-                </div>
+                </output>
               )}
               
               <div ref={messagesEndRef} />
@@ -192,21 +199,27 @@ export default function AICoach() {
 
             {/* Input Form */}
             <form onSubmit={handleSend} className="p-3 border-t border-white/5 bg-neutral-950 flex gap-2">
+              <label htmlFor="coach-message" className="sr-only">
+                Ask the carbon coach a question
+              </label>
               <input
+                id="coach-message"
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type your sustainability query here..."
-                aria-label="Ask how to reduce carbon footprints..."
+                maxLength={500}
+                autoComplete="off"
                 disabled={isSending}
                 className="flex-1 bg-black/50 border border-white/5 rounded-xl px-4 py-2.5 text-xs md:text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500/50 placeholder-neutral-600 disabled:opacity-50 font-sans"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isSending}
+                aria-label={isSending ? 'Sending message' : 'Send message'}
                 className="p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(99,102,241,0.2)] active:scale-95"
               >
-                <Send className="w-4 h-4" />
+                <Send aria-hidden="true" className="w-4 h-4" />
               </button>
             </form>
           </div>

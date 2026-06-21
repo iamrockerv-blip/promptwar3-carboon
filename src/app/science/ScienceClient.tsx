@@ -65,7 +65,7 @@ export default function ScienceClient() {
   return (
     <LazyMotion features={domMax}>
       <MotionConfig reducedMotion="user">
-        <main className="min-h-screen relative bg-bg-primary overflow-x-hidden flex flex-col items-center bg-mesh text-white">
+        <main id="main-content" tabIndex={-1} className="min-h-screen relative bg-bg-primary overflow-x-hidden flex flex-col items-center bg-mesh text-white">
           <Header />
 
           {/* Hero Header */}
@@ -154,7 +154,7 @@ export default function ScienceClient() {
                   </p>
 
                   {/* Category tabs */}
-                  <div className="flex flex-wrap gap-2 pt-2">
+                  <div className="flex flex-wrap gap-2 pt-2" role="tablist" aria-label="Carbon coefficient categories">
                     {Object.entries(FACTORS).map(([key, data]) => {
                       const Icon = data.icon;
                       const isActive = activeCategory === key;
@@ -162,6 +162,9 @@ export default function ScienceClient() {
                         <button
                           key={key}
                           type="button"
+                          role="tab"
+                          aria-selected={isActive}
+                          aria-controls="coefficient-panel"
                           onClick={() => setActiveCategory(key as keyof typeof FACTORS)}
                           className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold font-mono transition-all cursor-pointer ${
                             isActive
@@ -178,7 +181,13 @@ export default function ScienceClient() {
                 </div>
 
                 {/* Factors List inside Bento */}
-                <div className="space-y-4 pt-4 border-t border-white/5">
+                <div
+                  id="coefficient-panel"
+                  role="tabpanel"
+                  aria-live="polite"
+                  aria-label={selectedCategoryData.title}
+                  className="space-y-4 pt-4 border-t border-white/5"
+                >
                   <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-widest font-mono flex items-center gap-2">
                     <CategoryIcon className="w-4 h-4 text-emerald-400" />
                     {selectedCategoryData.title}

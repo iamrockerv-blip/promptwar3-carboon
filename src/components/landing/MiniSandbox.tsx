@@ -123,11 +123,11 @@ export default function MiniSandbox() {
 
         {/* Commute Selector */}
         <div className="space-y-2">
-          <div className="text-xs font-bold text-neutral-400 flex items-center gap-1.5">
+          <div id="commute-options-label" className="text-xs font-bold text-neutral-400 flex items-center gap-1.5">
             <Car className="w-3.5 h-3.5 text-neutral-500" />
             Daily Commuting
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <fieldset aria-labelledby="commute-options-label" className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {COMMUTE_OPTIONS.map((opt) => {
               const active = commute === opt.id;
               return (
@@ -135,6 +135,7 @@ export default function MiniSandbox() {
                   key={opt.id}
                   type="button"
                   onClick={() => setCommute(opt.id)}
+                  aria-pressed={active}
                   className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border flex flex-col items-center gap-1 cursor-pointer ${
                     active 
                       ? 'bg-white/10 border-white/20 text-white shadow-md' 
@@ -146,16 +147,16 @@ export default function MiniSandbox() {
                 </button>
               );
             })}
-          </div>
+          </fieldset>
         </div>
 
         {/* Diet Selector */}
         <div className="space-y-2">
-          <div className="text-xs font-bold text-neutral-400 flex items-center gap-1.5">
+          <div id="diet-options-label" className="text-xs font-bold text-neutral-400 flex items-center gap-1.5">
             <Utensils className="w-3.5 h-3.5 text-neutral-500" />
             Dietary Choices
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <fieldset aria-labelledby="diet-options-label" className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {DIET_OPTIONS.map((opt) => {
               const active = diet === opt.id;
               return (
@@ -163,6 +164,7 @@ export default function MiniSandbox() {
                   key={opt.id}
                   type="button"
                   onClick={() => setDiet(opt.id)}
+                  aria-pressed={active}
                   className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border flex flex-col items-center gap-1 cursor-pointer ${
                     active 
                       ? 'bg-white/10 border-white/20 text-white shadow-md' 
@@ -174,16 +176,16 @@ export default function MiniSandbox() {
                 </button>
               );
             })}
-          </div>
+          </fieldset>
         </div>
 
         {/* Travel Selector */}
         <div className="space-y-2">
-          <div className="text-xs font-bold text-neutral-400 flex items-center gap-1.5">
+          <div id="travel-options-label" className="text-xs font-bold text-neutral-400 flex items-center gap-1.5">
             <Plane className="w-3.5 h-3.5 text-neutral-500" />
             Flights & Aviation
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <fieldset aria-labelledby="travel-options-label" className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {TRAVEL_OPTIONS.map((opt) => {
               const active = travel === opt.id;
               return (
@@ -191,6 +193,7 @@ export default function MiniSandbox() {
                   key={opt.id}
                   type="button"
                   onClick={() => setTravel(opt.id)}
+                  aria-pressed={active}
                   className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border flex flex-col items-center gap-1 cursor-pointer ${
                     active 
                       ? 'bg-white/10 border-white/20 text-white shadow-md' 
@@ -202,7 +205,7 @@ export default function MiniSandbox() {
                 </button>
               );
             })}
-          </div>
+          </fieldset>
         </div>
       </div>
 
@@ -214,7 +217,7 @@ export default function MiniSandbox() {
         </div>
 
         {/* Aura Identity Card info */}
-        <div className="mt-6 text-center space-y-3 w-full">
+        <div className="mt-6 text-center space-y-3 w-full" aria-live="polite">
           <div className="flex justify-around items-center bg-black/40 border border-white/5 rounded-2xl py-3 px-4 w-full">
             <div>
               <p className="text-[10px] text-neutral-500 uppercase tracking-wider font-mono">Carbon score</p>

@@ -121,11 +121,12 @@ export default function LifeReplay() {
 
         {/* Action Button */}
         <m.button
+          type="button"
           onClick={advanceToResults}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 3.0, duration: 0.3 }}
-          className="px-6 py-2.5 rounded-lg bg-white text-bg-primary hover:bg-white/90 active:scale-95 font-semibold text-sm transition-all cursor-pointer outline-none shadow-md"
+          className="px-6 py-2.5 rounded-lg bg-white text-bg-primary hover:bg-white/90 active:scale-95 font-semibold text-sm transition-all cursor-pointer outline-none focus:ring-2 focus:ring-accent-sapphire shadow-md"
         >
           See Your Full Impact →
         </m.button>

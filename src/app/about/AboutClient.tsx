@@ -39,7 +39,7 @@ export default function AboutClient() {
   return (
     <LazyMotion features={domMax}>
       <MotionConfig reducedMotion="user">
-        <main className="min-h-screen relative bg-bg-primary overflow-x-hidden flex flex-col items-center bg-mesh text-white">
+        <main id="main-content" tabIndex={-1} className="min-h-screen relative bg-bg-primary overflow-x-hidden flex flex-col items-center bg-mesh text-white">
           <Header />
 
           {/* Hero Header */}
@@ -106,9 +106,12 @@ export default function AboutClient() {
 
                 {/* Micro-interactive switcher inside bento */}
                 <div className="bg-black/40 border border-white/5 rounded-2xl p-4 flex flex-col sm:flex-row gap-4 items-center justify-between mt-2">
-                  <div className="flex gap-2 shrink-0">
+                  <div className="flex gap-2 shrink-0" role="tablist" aria-label="Digital twin explanation">
                     <button
                       type="button"
+                      role="tab"
+                      aria-selected={activeInteractiveTab === 'flow'}
+                      aria-controls="twin-explanation-panel"
                       onClick={() => setActiveInteractiveTab('flow')}
                       className={`px-3 py-1.5 rounded-xl text-xs font-semibold font-mono transition-all cursor-pointer ${
                         activeInteractiveTab === 'flow' 
@@ -120,6 +123,9 @@ export default function AboutClient() {
                     </button>
                     <button
                       type="button"
+                      role="tab"
+                      aria-selected={activeInteractiveTab === 'stats'}
+                      aria-controls="twin-explanation-panel"
                       onClick={() => setActiveInteractiveTab('stats')}
                       className={`px-3 py-1.5 rounded-xl text-xs font-semibold font-mono transition-all cursor-pointer ${
                         activeInteractiveTab === 'stats' 
@@ -131,7 +137,12 @@ export default function AboutClient() {
                     </button>
                   </div>
 
-                  <div className="text-xs font-mono text-neutral-400 text-center sm:text-right">
+                  <div
+                    id="twin-explanation-panel"
+                    role="tabpanel"
+                    aria-live="polite"
+                    className="text-xs font-mono text-neutral-400 text-center sm:text-right"
+                  >
                     {activeInteractiveTab === 'flow' ? (
                       <span>Physical Actions <span className="text-emerald-400">→</span> Digital Model <span className="text-emerald-400">→</span> Aura Output</span>
                     ) : (

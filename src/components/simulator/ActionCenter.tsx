@@ -16,6 +16,34 @@ interface Particle {
   color: string;
 }
 
+function ParticleOverlay({ particles }: { particles: Particle[] }) {
+  return (
+    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden" aria-hidden="true">
+      {particles.map((particle) => (
+        <m.div
+          key={particle.id}
+          initial={{ opacity: 1, scale: 1.5, x: 0, y: 0 }}
+          animate={{
+            opacity: 0,
+            scale: 0.2,
+            x: particle.x,
+            y: particle.y,
+            rotate: 360
+          }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="fixed w-2 h-2 rounded-full pointer-events-none"
+          style={{
+            left: `${particle.originX}px`,
+            top: `${particle.originY}px`,
+            backgroundColor: particle.color,
+            boxShadow: `0 0 10px ${particle.color}`
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function ActionCenter() {
   const twin = useCarbonStore((state) => state.twin);
   const quizAnswers = useCarbonStore((state) => state.quizAnswers);
@@ -69,36 +97,21 @@ export default function ActionCenter() {
   return (
     <div className="p-6 rounded-3xl bg-neutral-900/40 border border-white/5 backdrop-blur-xl space-y-6 overflow-hidden">
       {/* Particle Overlay */}
-      <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-        {particles.map((p) => (
-          <m.div
-            key={p.id}
-            initial={{ opacity: 1, scale: 1.5, x: 0, y: 0 }}
-            animate={{ 
-              opacity: 0, 
-              scale: 0.2, 
-              x: p.x, 
-              y: p.y,
-              rotate: 360
-            }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="fixed w-2 h-2 rounded-full pointer-events-none"
-            style={{ 
-              left: `${p.originX}px`,
-              top: `${p.originY}px`,
-              backgroundColor: p.color,
-              boxShadow: `0 0 10px ${p.color}`
-            }}
-          />
-        ))}
-      </div>
+      <ParticleOverlay particles={particles} />
 
       {/* Tabs Header */}
       <div className="flex items-center justify-between border-b border-white/5 pb-4">
-        <div className="flex gap-2 bg-black/40 p-1.5 rounded-2xl border border-white/5">
-          <button
-            type="button"
-            onClick={() => setActiveTab('shifts')}
+          <div
+            className="flex gap-2 bg-black/40 p-1.5 rounded-2xl border border-white/5"
+            role="tablist"
+            aria-label="Action center views"
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'shifts'}
+              aria-controls="action-center-panel"
+              onClick={() => setActiveTab('shifts')}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeTab === 'shifts' 
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10' 
@@ -109,9 +122,12 @@ export default function ActionCenter() {
             Quick Wins Sandbox
           </button>
           
-          <button
-            type="button"
-            onClick={() => setActiveTab('quests')}
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'quests'}
+              aria-controls="action-center-panel"
+              onClick={() => setActiveTab('quests')}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer relative ${
               activeTab === 'quests' 
                 ? 'bg-green-600 text-white shadow-lg shadow-green-600/10' 
@@ -151,7 +167,12 @@ export default function ActionCenter() {
       </div>
 
       {/* Tabs Content */}
-      <div className="min-h-[300px]">
+      <div
+        id="action-center-panel"
+        role="tabpanel"
+        aria-label={activeTab === 'shifts' ? 'Quick wins sandbox' : 'Purification quests'}
+        className="min-h-[300px]"
+      >
         <AnimatePresence mode="wait">
           {activeTab === 'shifts' ? (
             <m.div

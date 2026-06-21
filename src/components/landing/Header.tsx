@@ -15,12 +15,12 @@ export default function Header() {
         </Link>
       </div>
       
-      <nav className="hidden md:flex items-center gap-6 px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-sm font-semibold text-neutral-300 shadow-sm">
+      <nav aria-label="Primary navigation" className="hidden md:flex items-center gap-6 px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-sm font-semibold text-neutral-300 shadow-sm">
         <Link href="/about" className="hover:text-accent-emerald transition-colors duration-200 cursor-pointer relative py-0.5 group">
           About
           <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-emerald transition-all duration-300 group-hover:w-full"></span>
         </Link>
-        <div className="w-[1px] h-3.5 bg-white/10"></div>
+        <div aria-hidden="true" className="w-[1px] h-3.5 bg-white/10"></div>
         <Link href="/science" className="hover:text-accent-emerald transition-colors duration-200 cursor-pointer relative py-0.5 group">
           Science
           <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-emerald transition-all duration-300 group-hover:w-full"></span>

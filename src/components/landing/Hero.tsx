@@ -97,7 +97,7 @@ export default function Hero() {
                     reset();
                     router.push('/app');
                   }}
-                  className="px-6 py-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-base cursor-pointer outline-none border border-white/10 active:scale-98 transition-all"
+                  className="px-6 py-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-base cursor-pointer outline-none focus:ring-2 focus:ring-accent-sapphire border border-white/10 active:scale-98 transition-all"
                 >
                   Retake Quiz
                 </button>

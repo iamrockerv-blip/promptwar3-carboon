@@ -64,12 +64,19 @@ export default function ProfileSettings() {
       </div>
 
       {/* Horizontal Category Tab Bar Selector */}
-      <div className="flex overflow-x-auto gap-2 bg-neutral-950/40 border border-white/5 p-1.5 rounded-2xl backdrop-blur-md">
+      <div
+        className="flex overflow-x-auto gap-2 bg-neutral-950/40 border border-white/5 p-1.5 rounded-2xl backdrop-blur-md"
+        role="tablist"
+        aria-label="Twin profile categories"
+      >
         {CATEGORY_TABS.map((tab) => {
           const isActive = activeCategory === tab.id;
           return (
             <button
               type="button"
+              role="tab"
+              aria-selected={isActive}
+              aria-controls="profile-category-panel"
               key={tab.id}
               onClick={() => setActiveCategory(tab.id)}
               className={`flex-1 min-w-[100px] flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
@@ -87,7 +94,12 @@ export default function ProfileSettings() {
 
       {/* Single Active Category Card */}
       {question && (
-        <div className="p-6 rounded-3xl bg-neutral-900/40 border border-white/5 backdrop-blur-xl space-y-4">
+        <div
+          id="profile-category-panel"
+          role="tabpanel"
+          aria-label={`${question.category} profile options`}
+          className="p-6 rounded-3xl bg-neutral-900/40 border border-white/5 backdrop-blur-xl space-y-4"
+        >
           <div>
             <span className="text-[10px] text-indigo-400 font-extrabold uppercase tracking-widest font-mono">
               Category 0{activeQuestionIndex + 1} | {question.category}

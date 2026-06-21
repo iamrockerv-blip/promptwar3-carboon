@@ -33,7 +33,11 @@ export default function LoadingState() {
   }, [activeLogIndex]);
 
   return (
-    <div className="w-full min-h-screen bg-bg-primary flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <output
+      className="w-full min-h-screen bg-bg-primary flex flex-col items-center justify-center p-4 relative overflow-hidden"
+      aria-live="polite"
+      aria-label="Generating your carbon twin"
+    >
       {/* Mesh Background Overlay */}
       <div className="absolute inset-0 bg-mesh opacity-45 pointer-events-none" />
 
@@ -42,7 +46,7 @@ export default function LoadingState() {
         
         {/* Terminal Header */}
         <div className="flex items-center justify-between border-b border-white/5 pb-3">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" aria-hidden="true">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
             <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
             <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
@@ -54,7 +58,7 @@ export default function LoadingState() {
 
         {/* Loading Ring overlaying the diagnostic output */}
         <div className="flex items-center gap-4 py-2 px-3 rounded-2xl bg-white/5 border border-white/5">
-          <div className="relative w-8 h-8 shrink-0">
+          <div className="relative w-8 h-8 shrink-0" aria-hidden="true">
             <m.div
               animate={{ rotate: 360 }}
               transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
@@ -72,7 +76,7 @@ export default function LoadingState() {
         </div>
 
         {/* Terminal Logs Output Stream */}
-        <div className="h-64 overflow-y-auto bg-black/60 p-4 rounded-xl border border-white/5 flex flex-col gap-2 font-mono text-[11px] text-emerald-400 select-none scrollbar-none">
+        <div className="h-64 overflow-y-auto bg-black/60 p-4 rounded-xl border border-white/5 flex flex-col gap-2 font-mono text-[11px] text-emerald-400 select-none scrollbar-none" aria-hidden="true">
           {logs.map((log) => (
             <div key={log} className="leading-relaxed">
               <span className="text-emerald-500 font-bold">{log}</span>
@@ -88,6 +92,6 @@ export default function LoadingState() {
         </div>
 
       </div>
-    </div>
+    </output>
   );
 }

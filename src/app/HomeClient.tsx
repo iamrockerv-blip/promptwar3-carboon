@@ -23,6 +23,17 @@ const ActionCenter = dynamic(() => import('@/components/simulator/ActionCenter')
 const AICoach = dynamic(() => import('@/components/coach/AICoach'), { ssr: false });
 const ShareCard = dynamic(() => import('@/components/share/ShareCard'), { ssr: false });
 
+const DASHBOARD_TABS = [
+  { id: 'overview', label: 'Overview', mobileLabel: 'Overview', icon: LayoutDashboard },
+  { id: 'sandbox', label: 'Habit Sandbox', mobileLabel: 'Sandbox', icon: Sliders },
+  { id: 'coach', label: 'AI Coach', mobileLabel: 'Coach', icon: MessageSquare },
+  { id: 'impacts', label: 'Earth Impact', mobileLabel: 'Impacts', icon: Globe },
+  { id: 'share', label: 'Print ID Card', mobileLabel: 'Print ID', icon: Share2 },
+  { id: 'profile', label: 'Twin Settings', mobileLabel: 'Settings', icon: Settings }
+] as const;
+
+type DashboardTabId = (typeof DASHBOARD_TABS)[number]['id'];
+
 export default function HomeClient() {
   const phase = useCarbonStore((state) => state.phase);
   const twin = useCarbonStore((state) => state.twin);
@@ -39,7 +50,7 @@ export default function HomeClient() {
 
   if (!mounted) {
     // Avoid SSR hydration warning, render black screen while hydrating store
-    return <main className="min-h-screen bg-bg-primary" />;
+    return <main id="main-content" tabIndex={-1} className="min-h-screen bg-bg-primary" />;
   }
 
   // Derive the effective active view phase on the /app route
@@ -53,7 +64,7 @@ export default function HomeClient() {
   return (
     <LazyMotion features={domMax}>
       <MotionConfig reducedMotion="user">
-        <main className="min-h-screen relative bg-bg-primary overflow-x-hidden flex flex-col justify-between">
+        <main id="main-content" tabIndex={-1} className="min-h-screen relative bg-bg-primary overflow-x-hidden flex flex-col justify-between">
           {/* Global Skip Intro overlay button */}
           <SkipIntroButton />
 
@@ -120,7 +131,8 @@ export default function HomeClient() {
 function DashboardView() {
   const reset = useCarbonStore((state) => state.reset);
   const setPhase = useCarbonStore((state) => state.setPhase);
-  const [activeTab, setActiveTab] = useState<'overview' | 'sandbox' | 'coach' | 'impacts' | 'share' | 'profile'>('overview');
+  const [activeTab, setActiveTab] = useState<DashboardTabId>('overview');
+  const activeTabLabel = DASHBOARD_TABS.find((tab) => tab.id === activeTab)?.label ?? 'Dashboard';
 
   const handleRestart = () => {
     reset();
@@ -146,22 +158,23 @@ function DashboardView() {
           </div>
 
           {/* Nav Links */}
-          <nav className="flex flex-col gap-2">
-            {[
-              { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-              { id: 'sandbox', label: 'Habit Sandbox', icon: Sliders },
-              { id: 'coach', label: 'AI Coach', icon: MessageSquare },
-              { id: 'impacts', label: 'Earth Impact', icon: Globe },
-              { id: 'share', label: 'Print ID Card', icon: Share2 },
-              { id: 'profile', label: 'Twin Settings', icon: Settings }
-            ].map((tab) => {
+          <div
+            aria-label="Dashboard sections"
+            role="tablist"
+            aria-orientation="vertical"
+            className="flex flex-col gap-2"
+          >
+            {DASHBOARD_TABS.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
               return (
                 <button
                   type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls="dashboard-panel"
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as 'overview' | 'sandbox' | 'coach' | 'impacts' | 'share' | 'profile')}
+                  onClick={() => setActiveTab(tab.id)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer border relative group ${
                     isActive
                       ? 'bg-white/10 text-white border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)]'
@@ -172,12 +185,12 @@ function DashboardView() {
                   {isActive && (
                     <span className="absolute left-0 top-1/4 bottom-1/4 w-1 rounded-r bg-emerald-400" />
                   )}
-                  <Icon className={`w-4 h-4 transition-colors ${isActive ? 'text-emerald-400' : 'text-neutral-500 group-hover:text-neutral-300'}`} />
+                  <Icon aria-hidden="true" className={`w-4 h-4 transition-colors ${isActive ? 'text-emerald-400' : 'text-neutral-500 group-hover:text-neutral-300'}`} />
                   {tab.label}
                 </button>
               );
             })}
-          </nav>
+          </div>
         </div>
 
         {/* Bottom Actions */}
@@ -225,35 +238,40 @@ function DashboardView() {
         </header>
 
         {/* Floating Bottom Navigation Bar for Mobile */}
-        <nav className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md bg-neutral-950/80 backdrop-blur-lg border border-white/10 rounded-2xl p-2 flex justify-around items-center shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
-          {[
-            { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-            { id: 'sandbox', label: 'Sandbox', icon: Sliders },
-            { id: 'coach', label: 'Coach', icon: MessageSquare },
-            { id: 'impacts', label: 'Impacts', icon: Globe },
-            { id: 'share', label: 'Print ID', icon: Share2 },
-            { id: 'profile', label: 'Settings', icon: Settings }
-          ].map((tab) => {
+        <div
+          aria-label="Dashboard sections"
+          role="tablist"
+          className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md bg-neutral-950/80 backdrop-blur-lg border border-white/10 rounded-2xl p-2 flex justify-around items-center shadow-[0_10px_35px_rgba(0,0,0,0.8)]"
+        >
+          {DASHBOARD_TABS.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
               <button
                 type="button"
+                role="tab"
+                aria-selected={isActive}
+                aria-controls="dashboard-panel"
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as 'overview' | 'sandbox' | 'coach' | 'impacts' | 'share' | 'profile')}
+                onClick={() => setActiveTab(tab.id)}
                 className={`flex flex-col items-center gap-1 py-1.5 px-2.5 rounded-xl text-[9px] font-extrabold transition-all cursor-pointer ${
                   isActive ? 'text-emerald-400 bg-white/5' : 'text-neutral-400 hover:text-white'
                 }`}
               >
-                <Icon className="w-4 h-4" />
-                <span>{tab.label}</span>
+                <Icon aria-hidden="true" className="w-4 h-4" />
+                <span>{tab.mobileLabel}</span>
               </button>
             );
           })}
-        </nav>
+        </div>
 
         {/* Content Area */}
-        <div className="flex-grow p-4 md:p-8 pb-28 md:pb-8 max-w-6xl w-full mx-auto space-y-6">
+        <div
+          id="dashboard-panel"
+          role="tabpanel"
+          aria-label={`${activeTabLabel} dashboard panel`}
+          className="flex-grow p-4 md:p-8 pb-28 md:pb-8 max-w-6xl w-full mx-auto space-y-6"
+        >
           {activeTab === 'overview' && (
             <m.div
               initial={{ opacity: 0, y: 10 }}
