@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+:root {
+  --bg-primary: hsl(222, 47%, 6%);
+  --bg-surface: hsl(222, 40%, 10%);
+  --bg-glass: rgba(13, 18, 30, 0.45);
+  --accent-green: hsl(142, 72%, 45%);
+  --accent-emerald: hsl(160, 84%, 39%);
+  --accent-sapphire: hsl(217, 91%, 56%);
+  --accent-amber: hsl(35, 92%, 52%);
+  --accent-crimson: hsl(350, 89%, 56%);
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 20%, 65%);
+  --border-glass: rgba(255, 255, 255, 0.08);
+
+  --background: var(--bg-primary);
+  --foreground: var(--text-primary);
+}
+
+@theme {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-glass: var(--bg-glass);
+  --color-accent-green: var(--accent-green);
+  --color-accent-emerald: var(--accent-emerald);
+  --color-accent-sapphire: var(--accent-sapphire);
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-crimson: var(--accent-crimson);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-border-glass: var(--border-glass);
+
+  --font-display: var(--font-outfit), sans-serif;
+  --font-sans: var(--font-inter), sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.glass-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7);
+  transform: translateY(-2px);
+}
+
+.gradient-green { background: linear-gradient(135deg, hsl(142, 72%, 45%), hsl(160, 84%, 39%)); }
+.gradient-emerald { background: linear-gradient(135deg, hsl(160, 84%, 39%), hsl(175, 80%, 45%)); }
+.gradient-sapphire { background: linear-gradient(135deg, hsl(217, 91%, 56%), hsl(230, 85%, 65%)); }
+.gradient-amber { background: linear-gradient(135deg, hsl(35, 92%, 52%), hsl(20, 90%, 48%)); }
+.gradient-crimson { background: linear-gradient(135deg, hsl(350, 89%, 56%), hsl(340, 85%, 45%)); }
+
+.bg-mesh {
+  background-color: var(--bg-primary);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(217, 91%, 56%, 0.12) 0px, transparent 55%),
+    radial-gradient(at 100% 0%, hsla(142, 72%, 45%, 0.12) 0px, transparent 55%),
+    radial-gradient(at 50% 50%, hsla(250, 85%, 65%, 0.06) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, hsla(217, 91%, 56%, 0.08) 0px, transparent 55%);
+}
+
+@keyframes custom-bounce-ease {
+  0%, 100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  50% {
+    transform: translateY(-6px);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+.animate-smooth-bounce {
+  animation: custom-bounce-ease 1.2s infinite;
+}
+
+/* 3D Transform Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Glow Utilities */
+.glowing-border {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glowing-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background 0.3s ease;
+}
+
+.glowing-border:hover::before {
+  background: linear-gradient(135deg, var(--accent-emerald), var(--accent-sapphire));
+}
+
+.glow-ring {
+  position: relative;
+  box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.15);
+  transition: box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glow-ring:hover {
+  box-shadow: 0 0 40px 0px rgba(16, 185, 129, 0.3);
+}
+
+/* Custom blended scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+

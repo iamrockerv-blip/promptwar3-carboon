@@ -1,0 +1,3 @@
+# Crawlers allowance for Carbon Twin AI
+User-agent: *
+Allow: /
